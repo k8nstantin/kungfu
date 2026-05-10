@@ -37,9 +37,21 @@ impl<'a> VirtualFileSystem<'a> {
                     .map_err(|e| anyhow::anyhow!("CRDT Move failed: {:?}", e))?;
                 tid
             }
-            OpType::Create { kind: _ } => {
+            OpType::Create { kind } => {
+                // In KungFu, 'kind' carries the metadata: "name:kind" e.g. "main.go:file"
+                let parts: Vec<&str> = kind.split(':').collect();
+                let name = parts.get(0).unwrap_or(&"unnamed");
+                let file_type = parts.get(1).unwrap_or(&"file");
+
                 let node_id = self.tree.create(target_id)
                     .map_err(|e| anyhow::anyhow!("CRDT Create failed: {:?}", e))?;
+                
+                // GAP-002 FIX: Initialize metadata
+                let meta = self.tree.get_meta(node_id).map_err(|e| anyhow::anyhow!("Meta access failed: {:?}", e))?;
+                meta.insert("name", *name).unwrap();
+                meta.insert("kind", *file_type).unwrap();
+                meta.insert("id", id::must_new()).unwrap(); // UUIDv7 tracking
+
                 node_id
             }
             OpType::Delete => {
@@ -56,6 +68,23 @@ impl<'a> VirtualFileSystem<'a> {
             target_id: actual_target_id.to_string(),
             op_type: op,
         })
+    }
+
+    pub fn read_by_id(&self, target_id: TreeID) -> String {
+        let text_id = format!("file_{}", target_id.to_string());
+        let text = self.doc.get_text(text_id.as_str());
+        text.to_string()
+    }
+
+    pub fn find_by_path(&self, path: &str) -> Result<TreeID> {
+        let nodes = self.tree.get_nodes(false);
+        for node in nodes {
+            let p = self.resolve_path(node.id)?;
+            if p.to_string_lossy() == path {
+                return Ok(node.id);
+            }
+        }
+        Err(anyhow::anyhow!("File not found: {}", path))
     }
 
     pub fn transcribe(&self, destination: &Path) -> Result<()> {
