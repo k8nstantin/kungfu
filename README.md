@@ -42,24 +42,29 @@ You write code for hours. You stop. You navigate a myriad of complex CLI command
 **KungFu is a Continuous Streaming system built for agents (with humans in the loop).**
 There are no batches. There are no complex commands to memorize. As an agent types, every single character deletion or insertion is streamed in real-time as a microscopic **CRDT** (Conflict-free Replicated Data Type) operation over a WebSocket. Because the edits are streamed instantly and applied via pure mathematics (Fugue/MovableTree algorithms), they weave together perfectly. **You cannot have a merge conflict if you never merge.**
 
+### ❌ The Git Paradigm (Batch & Break)
 ```mermaid
 sequenceDiagram
-    participant G as Git (Legacy)
-    participant A as Agent
-    participant K as KungFu (Fluid)
+    participant A as Agent 🤖
+    participant G as Git 📦
 
-    Note over G,A: ❌ Batch Friction
     A->>G: Write 50 lines (2 hours)
     A->>G: git commit && push
-    G-->>A: ERROR: Merge Conflict!
-    Note right of A: Work stops. Agent must rebase.
+    G-->>A: 💥 ERROR: Merge Conflict!
+    Note right of A: Work stops. Agent must parse<br/>conflict markers and rebase.
+```
 
-    Note over A,K: ✅ Continuous Flow
+### ✅ The KungFu Paradigm (Flow 功夫)
+```mermaid
+sequenceDiagram
+    participant A as Agent 🤖
+    participant K as KungFu 功夫
+
     A->>K: Splice(offset:10)
     K-->>A: ACK (1ms)
     A->>K: Splice(offset:42)
     K-->>A: ACK (1ms)
-    Note left of K: Math weaving in real-time.
+    Note left of K: 🌊 CRDT Math weaves<br/>edits in real-time.
     Note over A,K: Work never stops.
 ```
 
