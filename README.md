@@ -1,81 +1,108 @@
-# KungFu (kf) 🥋
+# 功夫 KungFu (kf) 🥋
 
-**"KungFu is evolving your code."**
+> *"Kung Fu (功夫): A skill achieved through hard work, repetition, and practice."*
 
-KungFu is a next-generation, agent-native version control system (VCS) powered by the **Loro CRDT engine**. It replaces the rigid, human-first paradigm of Git with a fluid, operation-based system where AI agents and humans collaborate in a continuous, conflict-free stream.
+**Git is dead. Long live KungFu.**
 
----
+Git was built in 2005 for humans emailing static patches to the Linux kernel mailing list. It is a phenomenal tool for human administration, but it is fundamentally broken for the Agentic Era. When you have a swarm of autonomous AI agents generating 50 lines of code every 3 seconds, asking them to stop, stage, write a commit message, and resolve `<<<< HEAD` merge conflicts is like putting a horse engine in a Tesla.
 
-## 🛑 Why not Git? (The Problem)
+KungFu is a next-generation, agent-native version control system (VCS). It replaces the rigid, human-first snapshot paradigm of Git with a fluid, operation-based CRDT engine where AI agents and humans collaborate in a continuous, conflict-free stream.
 
-Git was built in 2005 for humans emailing patches to each other. It is a phenomenal tool for human administration, but it is fundamentally broken for the Agentic Era:
-
-1. **Snapshots are Lossy:** Git tracks the *result* (diffs), not the *intent* (operations). If an agent rewrites 50 lines to fix a typo, Git just sees 50 lines changed.
-2. **Merge Conflicts are Fatal:** If two agents touch the same file, Git throws a `<<<< HEAD` conflict. Agents cannot parse these reliably, leading to catastrophic hallucination loops.
-3. **The "Human Tax":** Staging areas, commit messages, and complex rebases force the agent to act like a database administrator.
-4. **Open Shell Danger:** Forcing agents to use `bash` to run Git commands is slow, error-prone, and a massive security risk.
-
-## 🌊 Why KungFu? (The Solution)
-
-KungFu abandons the "Snapshot" model for the **Mathematical Flow Model**.
-
-1. **Agent-Native Interface (MCP):** Agents do not use bash or Git commands. They connect to the local KungFu server via the Model Context Protocol (MCP) and issue surgical `Splice` and `Move` commands.
-2. **Conflict-Free Concurrency:** Powered by Loro's `MovableTree` and `Fugue` algorithms, KungFu resolves concurrent edits mathematically. Merge conflicts are effectively obsolete.
-3. **The Intent Timeline:** KungFu groups high-frequency agent operations into semantic *Intents*. You don't review raw diffs; you review the agent's reasoning.
-4. **Branchless Architecture:** There are no branches. Everything is a "Mutation" on the main DNA sequence.
+**We are not managing files. We are evolving code.**
 
 ---
 
-## 🧬 The Biological Metaphor
+## 📜 Table of Contents
+1. [The Paradigm Shift: KungFu vs. Git](#-the-paradigm-shift-kungfu-vs-git)
+2. [Why We Built It in Rust](#-the-engine-why-rust)
+3. [The CRDT Magic (Loro)](#-the-crdt-magic-loro)
+4. [The Surgical VFS](#-the-surgical-vfs)
+5. [The Evolutionary Loop](#-the-evolutionary-loop-how-it-works)
+6. [Getting Started](#-getting-started)
 
-KungFu treats your codebase not as a machine to be built, but as an organism to be evolved.
+---
 
-- **Dojo:** The workspace (Local or Remote).
-- **The DNA:** The absolute source of truth. The mathematical log of all Operations and Intents.
-- **The Organism:** The physical codebase (The Trunk). The living result of executing the DNA.
-- **Mutation:** An isolated deviation from the DNA for agent experimentation.
-- **Transcription:** Projecting the CRDT DNA into physical files on your SSD so legacy tools (compilers/linters) still work.
-- **Seed:** A hard, immutable cryptographic checkpoint used for deployment to CI/CD.
+## ⚔️ The Paradigm Shift: KungFu vs. Git
 
-## 🔄 The Evolutionary Loop (How it works)
+| Feature | Git (The Legacy) | 功夫 KungFu (Agent-Native) |
+| :--- | :--- | :--- |
+| **Data Structure** | Static Snapshots of Files | Continuous Graph of Operations (CRDT) |
+| **Collaboration** | Manual `push` / `pull` / `fetch` | Continuous background streaming (Osmosis) |
+| **Conflict Resolution** | Human manually fixes `<<<< HEAD` | Mathematical. Automatic weave via Fugue/MovableTree |
+| **The "Branch"** | Divergent physical copies (`checkout -b`) | Branchless. Filtered mutation vectors on a single Trunk |
+| **Agent Interface** | Error-prone Bash commands | Native MCP Server (Surgical `Splice` tools) |
+| **History View** | A list of opaque hashes and commit messages | A semantic timeline of **Intents** and Agent Reasoning |
+| **Philosophy** | Mechanical Construction | Organic Evolution |
+
+---
+
+## 🦀 The Engine: Why Rust?
+
+KungFu is built entirely in **Rust**. Why? Because agents don't type; they blast. 
+
+When you have a swarm of agents generating code, the system needs to process thousands of character-level edits per second, lock-free.
+* **Fearless Concurrency:** We use `tokio` to handle hundreds of agent WebSocket connections simultaneously.
+* **Memory Safety:** We are manipulating the actual byte-arrays of the codebase in memory. Rust guarantees we don't corrupt the project source code.
+* **Zero-Cost Bincode:** We don't send heavy JSON diffs over the network. We send highly compressed, native Rust `Bincode` byte streams. It takes less than 50ms for an agent in Tokyo to see a character typed by an agent in New York.
+
+---
+
+## 🧠 The CRDT Magic (Loro)
+
+The heart of KungFu is the **[Loro](https://loro.dev)** library (a high-performance CRDT engine). In KungFu, files don't technically exist. The codebase is a living mathematical graph.
+
+We use two specific Loro algorithms to make merge conflicts mathematically impossible:
+* **Fugue (The Text Algorithm):** If Agent A and Agent B edit the exact same line of code at the exact same millisecond, Git throws a conflict and gives up. Loro uses Fugue to mathematically weave the two strings together into a valid state. 
+* **MovableTree (The Filesystem):** In Git, if you rename a folder while someone else edits a file inside it, the repo explodes. Loro natively models the filesystem as a `MovableTree`. Every file has a UUIDv7. You can move `/src` to `/lib`, and the agent editing `auth.go` inside it doesn't even notice. 
+
+---
+
+## 🔪 The Surgical VFS
+
+AI agents are trained to use tools like `read_file` and `edit_file`. If we force them to learn "CRDT Graph Math," they hallucinate. 
+
+So, we built the **Surgical Virtual File System (VFS)**.
+When an agent connects to the KungFu MCP Server and says *"I want to edit main.go"*, the Rust server intercepts that command. It traverses the Loro `MovableTree`, finds the UUIDv7 for `main.go`, and executes a mathematical `Splice` on the CRDT text object. 
+
+The agent thinks it's hacking in a bash terminal. In reality, it is streaming pure math into a conflict-free DNA sequence. 
+
+---
+
+## 🧬 The Evolutionary Loop (How it works)
+
+Because of this architecture, **KungFu has no branches.** Everything happens on a single, continuous timeline (The DNA). 
 
 1. **Mutate:** An agent (or human) starts a new task. KungFu isolates a mutation vector. (`kf mutate`)
 2. **Expression:** The agent performs surgical `Splice` operations via MCP directly into the CRDT.
 3. **Intent:** The agent explains the reasoning behind the operations. (`kf intent`)
 4. **Expose:** The mutation is exposed to the environment (the test suite). (`kf expose`)
 5. **Evolve:** If the mutation survives exposure (tests pass), it is permanently woven into the Organism's DNA.
-6. **Osmosis:** The new DNA is shared via background P2P sync with all peers. (`kf osmose`)
+6. **Osmose:** The new DNA is shared via background P2P sync with all peers. (`kf osmose`)
 
 ---
 
 ## 🚀 Getting Started
 
-KungFu is a standalone Rust binary. It runs entirely locally.
+KungFu is a standalone Rust binary. 
 
 ### 1. Initialize the Dojo
 ```bash
 kf init
 ```
-*This generates your Ed25519 identity, creates the `.kungfu` database, and establishes the local Write-Ahead Log (WAL).*
+*Generates your Ed25519 identity, creates the `.kungfu` database, and establishes the local Write-Ahead Log (WAL).*
 
 ### 2. Start the Agent Gateway
 ```bash
 kf mcp
 ```
-*This spins up a local Axum server on `127.0.0.1:8766`. Hook Claude Code, Gemini, or OpenPraxis to this port. They will automatically discover the `kungfu_splice`, `kungfu_read`, and `kungfu_create` tools.*
+*Spins up a local Axum server on `127.0.0.1:8766`. Hook Claude Code, Gemini, or OpenPraxis to this port to expose the `kungfu_splice`, `kungfu_read`, and `kungfu_create` tools.*
 
 ### 3. Materialize the Code
-Once your agents have evolved the DNA, project it onto your physical disk to run your compiler or tests:
+Project the CRDT DNA onto your physical disk to run your compiler or tests:
 ```bash
 kf transcribe ./src
 ```
 
 ---
-
-## 🤝 The Open Source Vision
-
-We are building KungFu in the open because the Agentic Era needs a universal, decentralized foundation. Eventually, the KungFu repository itself will be hosted on KungFu. Until then, we use Git.
-
 **Join the Dojo. Help us evolve the future.**
-
 *License: Apache 2.0*
