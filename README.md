@@ -44,23 +44,23 @@ There are no batches. There are no complex commands to memorize. As an agent typ
 
 ```mermaid
 sequenceDiagram
+    participant G as Git (Legacy)
     participant A as Agent
-    participant G as Git
-    participant K as KungFu
+    participant K as KungFu (Fluid)
 
-    Note over A,G: ❌ Git: The Batch Paradigm
-    A->>G: Edit 50 lines over 2 hours
-    A->>G: git add .
-    A->>G: git commit -m "fix"
-    A->>G: git push
-    G-->>A: Error: Merge Conflict!
+    Note over G,A: ❌ Batch Friction
+    A->>G: Write 50 lines (2 hours)
+    A->>G: git commit && push
+    G-->>A: ERROR: Merge Conflict!
+    Note right of A: Work stops. Agent must rebase.
 
-    Note over A,K: ✅ KungFu: The Streaming Paradigm
+    Note over A,K: ✅ Continuous Flow
     A->>K: Splice(offset:10)
-    K-->>K: Sync delta (1ms)
+    K-->>A: ACK (1ms)
     A->>K: Splice(offset:42)
-    K-->>K: Sync delta (1ms)
-    Note over K: Math resolves all edits instantly.
+    K-->>A: ACK (1ms)
+    Note left of K: Math weaving in real-time.
+    Note over A,K: Work never stops.
 ```
 
 
