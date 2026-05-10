@@ -51,6 +51,18 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                             }
                         },
                         {
+                            "name": "kungfu_create",
+                            "description": "Create a new file or directory in the VFS.",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "path": { "type": "string" },
+                                    "kind": { "type": "string", "enum": ["file", "dir"] }
+                                },
+                                "required": ["path", "kind"]
+                            }
+                        },
+                        {
                             "name": "kungfu_splice",
                             "description": "Surgically edit the CRDT codebase.",
                             "inputSchema": {
@@ -71,7 +83,7 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
         "tools/call" => {
             if let Some(params_val) = req.params {
                 if let Ok(call) = serde_json::from_value::<CallParams>(params_val) {
-                    let dojo = state.dojo.lock().await;
+                    println!("Waiting for lock..."); let dojo = state.dojo.lock().await; println!("Lock acquired.");
                     let vfs = VirtualFileSystem::new(&dojo.doc);
 
                     if call.name == "kungfu_read" {
@@ -95,6 +107,41 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                         }
                     }
 
+                    if call.name == "kungfu_create" {
+                        if let Some(args) = call.arguments {
+                            let path = args.get("path").and_then(|v| v.as_str()).unwrap_or("");
+                            let kind = args.get("kind").and_then(|v| v.as_str()).unwrap_or("file");
+
+                            // Removed double lock
+                            let vfs = VirtualFileSystem::new(&dojo.doc);
+                            
+                            // Using the formatted string trick to pass name:kind
+                            let op = OpType::Create { kind: format!("{}:{}", path, kind) };
+                            match vfs.express("active_intent", None, op) {
+                                Ok(trace) => {
+                                    let trace_bytes = bincode::serde::encode_to_vec(&trace, bincode::config::standard()).unwrap_or_default();
+                                    drop(dojo);
+                                    
+                                    let log_path = state.workspace_dir.join(".kungfu/ops.log");
+                                    tokio::spawn(async move {
+                                        use tokio::io::AsyncWriteExt;
+                                        if let Ok(mut file) = tokio::fs::OpenOptions::new().append(true).open(log_path).await {
+                                            let _ = file.write_all(&trace_bytes).await;
+                                        }
+                                    });
+
+                                    return Json(json!({
+                                        "jsonrpc": "2.0", "id": req.id,
+                                        "result": { "content": [{ "type": "text", "text": format!("Created {} at trace {}", path, trace.id) }] }
+                                    }));
+                                }
+                                Err(e) => {
+                                    return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } }));
+                                }
+                            }
+                        }
+                    }
+
                     if call.name == "kungfu_splice" {
                         if let Some(args) = call.arguments {
                             let path = args.get("path").and_then(|v| v.as_str()).unwrap_or("");
@@ -109,7 +156,7 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                                         Ok(trace) => {
                                             // GAP-003 FIX: Append to the WAL instead of full snapshot
                                             let trace_bytes = bincode::serde::encode_to_vec(&trace, bincode::config::standard()).unwrap_or_default();
-                                            drop(dojo); // Release mutex
+                                            drop(dojo); println!("Lock released.");
                                             
                                             let log_path = state.workspace_dir.join(".kungfu/ops.log");
                                             tokio::spawn(async move {
