@@ -12,6 +12,19 @@ KungFu is a next-generation, agent-native version control system (VCS). It repla
 
 ---
 
+## 🆚 The Core Difference: Streaming vs. Batching
+
+When developers ask, *"How is this different from Git?"* The answer lies in physics.
+
+**Git is a Batch Processing system.**
+You write code for hours. You stop. You bundle it all up into a `commit`. You push that massive batch of changes to a server. If someone else pushed a batch at the same time, the system breaks (Merge Conflict) and forces a human to manually resolve the collision. 
+
+**KungFu is a Continuous Streaming system.**
+There are no batches. There are no commits. As an agent types, every single character deletion or insertion is streamed in real-time as a microscopic CRDT operation over a WebSocket. Because the edits are streamed instantly and applied mathematically, they weave together seamlessly. **You cannot have a merge conflict if you never merge.**
+
+
+---
+
 ## ⚡️ The KungFu Advantage
 
 *Git forces machines to act like humans. KungFu allows humans to orchestrate machines.*
