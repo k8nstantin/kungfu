@@ -12,6 +12,17 @@ KungFu is a next-generation, agent-native version control system (VCS). It repla
 
 ---
 
+## ⚡️ The KungFu Advantage
+
+*Git forces machines to act like humans. KungFu allows humans to orchestrate machines.*
+
+1. **Speed (Zero-Cost Edits):** Agents don't rewrite 2,000-line files to change a variable. They send a 50-byte `Splice` JSON payload over a local WebSocket. The math updates in memory in under a millisecond.
+2. **Scale (Infinite Concurrency):** If 5 agents edit the same file in Git, the system crashes with `<<<< HEAD`. In KungFu, 1,000 agents can edit the exact same file simultaneously. The CRDT math guarantees a perfect, conflict-free merge.
+3. **Safety (Cryptographic Identity):** Git authorship can be spoofed trivially. In KungFu, every single character typed is signed by an Ed25519 Private Key. You can cryptographically prove exactly which agent wrote which line.
+4. **Semantics (The "Why"):** You don't review a 400-line diff of `+` and `-` symbols. You review the **Intent Log**. You see: *"Intent: Refactoring Auth"* ➔ Linked to 12 Splice Operations. You review reasoning, not just raw text.
+5. **Simplicity (Trunk-Only):** No rebasing. No cherry-picking. No stashing. There is only the DNA (The Trunk). You `Mutate` (experiment) and you `Expose` (test). If it passes, it is permanent.
+
+
 ## 📜 Table of Contents
 1. [The Paradigm Shift: KungFu vs. Git](#-the-paradigm-shift-kungfu-vs-git)
 2. [Why We Built It in Rust](#-the-engine-why-rust)
