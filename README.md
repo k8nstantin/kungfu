@@ -70,6 +70,7 @@ We aren't just "better" than Git. We are the antithesis of Git. KungFu is a fund
 - **We reject Branches.** Branches are isolationist. We embrace **Extreme Trunk-Based Evolution**, where all Mutations happen on a single, continuous DNA stream.
 - **We reject Manual Merging.** Manual merging is a human tax. We embrace **Mathematical Convergence**.
 - **We reject the Staging Area.** Staging is friction. We embrace **Real-time Streaming**.
+- **We reject the Manual.** Git literally comes with a book. KungFu is intelligent. You shouldn't need a textbook to save your work and collaborate with your team.
 
 Git was designed for a world of slow, human-to-human patch-mailing. KungFu is designed for a world of high-frequency, machine-to-machine evolution.
 
