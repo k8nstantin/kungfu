@@ -15,18 +15,27 @@ graph LR
         A1[Agent 🤖] --> B{Merge Conflicts}
         A2[Agent 🤖] --> B
         A3[Agent 🤖] --> B
-        B -->|💥 Accident| C[Branch Graveyard]
+        B -->|💥 Accident| C[Branch Graveyard ☠️]
         C -.->|🚫 Congestion| B
+        D1[Dead Branch 1] -.-> C
+        D2[Dead Branch 2] -.-> C
+        D3[Dead Branch 3] -.-> C
     end
 
     subgraph KF [✅ KungFu: The Flow 功夫]
         direction TB
-        K1[Agent 🤖] --> S((Main Stream DNA))
-        K2[Agent 🤖] --> S
-        K3[Agent 🤖] --> S
+        K1[Agent 🤖] -->|Splice| S((Main Stream DNA 🧬))
+        K2[Agent 🤖] -->|Splice| S
+        K3[Agent 🤖] -->|Splice| S
+        K4[Agent 🤖] -->|Splice| S
+        K5[Agent 🤖] -->|Splice| S
         S --> E[🌊 Infinite Flow]
     end
 ```
+
+**The Visual Contrast:**
+*   **The Git Graveyard:** In Git, multiple agents quickly create a tangled mess of dead, un-mergeable branches. When they finally attempt to merge, they cause accidents (conflicts), causing work to stop while humans intervene to untangle the congestion.
+*   **The Main Stream DNA:** In KungFu, there are no branches to die. A swarm of agents (5, 10, 100...) stream mathematical `Splices` directly into the singular Main Stream DNA. The CRDT engine weaves them together automatically, ensuring the system remains in a state of Infinite Flow without a single collision.
 
 
 ---
