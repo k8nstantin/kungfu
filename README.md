@@ -282,5 +282,12 @@ kf transcribe ./src
 ```
 
 ---
-**Join the Dojo. Help us evolve the future.**
+## 🤝 The Open Source Vision
+
+We are building KungFu in the open because the Agentic Era needs a universal, decentralized foundation. Check our **[GAP_ANALYSIS.md](./GAP_ANALYSIS.md)** to see the current roadmap and where we need help.
+
+Ready to contribute? Read the **[CONTRIBUTING.md](./CONTRIBUTING.md)** and join the Dojo.
+
+**KungFu is evolving your code. Join the evolution.**
+
 *License: Apache 2.0*
