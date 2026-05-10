@@ -3,6 +3,8 @@ use anyhow::Result;
 
 mod cli;
 mod core;
+mod mcp;
+mod pkg;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -16,6 +18,18 @@ struct Cli {
 enum Commands {
     /// Initialize a new KungFu Dojo (workspace)
     Init,
+    /// Start the local MCP Gateway for agents
+    Mcp,
+    /// Plant an immutable Seed for deployment
+    Seed { 
+        /// Version name (e.g. v1.0)
+        name: String 
+    },
+    /// Transcribe DNA into physical files
+    Transcribe { 
+        /// Destination path (defaults to current dir)
+        dest: Option<std::path::PathBuf> 
+    },
     /// View the status of the current Dojo
     Status,
 }
@@ -28,6 +42,15 @@ async fn main() -> Result<()> {
         Commands::Init => {
             cli::init::run()?;
         }
+        Commands::Mcp => {
+            mcp::server::run_server().await?;
+        }
+        Commands::Seed { name } => {
+            cli::seed::run(name.clone())?;
+        }
+        Commands::Transcribe { dest } => {
+            cli::transcribe::run(dest.clone())?;
+        }
         Commands::Status => {
             println!("Dojo is quiet. No active flows.");
         }
@@ -35,5 +58,3 @@ async fn main() -> Result<()> {
 
     Ok(())
 }
-
-mod pkg;

@@ -1,10 +1,10 @@
 use anyhow::{Context, Result};
-use loro::{LoroDoc, LoroTree, LoroText, TreeID};
-use crate::core::history::{Intent, OpType, OperationTrace};
+use loro::{LoroDoc, LoroTree, TreeID};
+use crate::core::history::{OpType, OperationTrace};
 use crate::pkg::id;
+use std::fs;
+use std::path::{Path, PathBuf};
 
-/// VirtualFileSystem translates Agent operations into Loro CRDT math.
-/// It operates entirely on the Trunk (the LoroDoc).
 pub struct VirtualFileSystem<'a> {
     doc: &'a LoroDoc,
     tree: LoroTree,
@@ -12,61 +12,100 @@ pub struct VirtualFileSystem<'a> {
 
 impl<'a> VirtualFileSystem<'a> {
     pub fn new(doc: &'a LoroDoc) -> Self {
-        // "vfs" is the root MovableTree in the Loro document.
         let tree = doc.get_tree("vfs");
         VirtualFileSystem { doc, tree }
     }
 
-    /// Express applies a surgical operation to the Trunk and returns the trace.
-    /// This is the core of KungFu's Agent-Native design. No full file overwrites.
-    pub fn express(&self, intent_id: &str, target_id: TreeID, op: OpType) -> Result<OperationTrace> {
-        match &op {
+    pub fn express(&self, intent_id: &str, target_id: Option<TreeID>, op: OpType) -> Result<OperationTrace> {
+        let actual_target_id = match &op {
             OpType::Splice { offset, delete_len, insert } => {
-                // Get the LoroText object associated with this file's TreeID
-                let text_id = format!("file_{}", target_id.to_string());
+                let tid = target_id.context("Target TreeID required for Splice")?;
+                let text_id = format!("file_{}", tid.to_string());
                 let text = self.doc.get_text(text_id.as_str());
-                
                 text.splice(*offset, *delete_len, insert)
                     .map_err(|e| anyhow::anyhow!("CRDT Splice failed: {:?}", e))?;
+                tid
             }
             OpType::Move { new_parent } => {
-                // Parse the parent ID (handling root case)
+                let tid = target_id.context("Target TreeID required for Move")?;
                 let parent_tree_id = if new_parent.is_empty() {
                     None
                 } else {
                     Some(TreeID::try_from(new_parent.as_str()).map_err(|_| anyhow::anyhow!("Invalid parent ID"))?)
                 };
-                
-                self.tree.mov(target_id, parent_tree_id)
+                self.tree.mov(tid, parent_tree_id)
                     .map_err(|e| anyhow::anyhow!("CRDT Move failed: {:?}", e))?;
+                tid
             }
             OpType::Create { kind: _ } => {
-                // Create a new node in the MovableTree
-                let _new_node = self.tree.create(None)
+                let node_id = self.tree.create(target_id)
                     .map_err(|e| anyhow::anyhow!("CRDT Create failed: {:?}", e))?;
-                // The actual ID would be returned here, but for this mock we just execute it.
+                node_id
             }
             OpType::Delete => {
-                self.tree.delete(target_id)
+                let tid = target_id.context("Target TreeID required for Delete")?;
+                self.tree.delete(tid)
                     .map_err(|e| anyhow::anyhow!("CRDT Delete failed: {:?}", e))?;
+                tid
             }
-        }
-
-        // Generate the chronological UUIDv7 for the operation trace
-        let trace_id = id::must_new();
+        };
 
         Ok(OperationTrace {
-            id: trace_id,
+            id: id::must_new(),
             intent_id: intent_id.to_string(),
-            target_id: target_id.to_string(),
+            target_id: actual_target_id.to_string(),
             op_type: op,
         })
     }
 
-    /// Read retrieves the current CRDT text state for a given file ID.
-    pub fn read(&self, target_id: TreeID) -> String {
-        let text_id = format!("file_{}", target_id.to_string());
-        let text = self.doc.get_text(text_id.as_str());
-        text.to_string()
+    pub fn transcribe(&self, destination: &Path) -> Result<()> {
+        if !destination.exists() {
+            fs::create_dir_all(destination)?;
+        }
+
+        let nodes = self.tree.get_nodes(false);
+        for node in nodes {
+            let node_id = node.id;
+            let path = self.resolve_path(node_id)?;
+            let full_path = destination.join(path);
+
+            let meta = self.tree.get_meta(node_id).map_err(|e| anyhow::anyhow!("Failed to get meta: {:?}", e))?;
+            let kind = meta.get("kind").and_then(|v| v.into_value().ok()).and_then(|v| v.as_string().map(|s| s.to_string())).unwrap_or_else(|| "file".to_string());
+
+            if kind == "dir" {
+                fs::create_dir_all(&full_path)?;
+            } else {
+                if let Some(parent) = full_path.parent() {
+                    fs::create_dir_all(parent)?;
+                }
+                let text_id = format!("file_{}", node_id.to_string());
+                let text = self.doc.get_text(text_id.as_str());
+                fs::write(full_path, text.to_string())?;
+            }
+        }
+        Ok(())
+    }
+
+    fn resolve_path(&self, id: TreeID) -> Result<PathBuf> {
+        let mut components = Vec::new();
+        let mut curr = Some(id);
+
+        while let Some(node_id) = curr {
+            let meta = self.tree.get_meta(node_id).map_err(|e| anyhow::anyhow!("Failed to get meta: {:?}", e))?;
+            let name = meta.get("name").and_then(|v| v.into_value().ok()).and_then(|v| v.as_string().map(|s| s.to_string())).unwrap_or_else(|| "unnamed".to_string());
+            components.push(name);
+            
+            curr = match self.tree.parent(node_id) {
+                Some(loro::TreeParentId::Node(pid)) => Some(pid),
+                _ => None,
+            };
+        }
+
+        components.reverse();
+        let mut path = PathBuf::new();
+        for c in components {
+            path.push(c);
+        }
+        Ok(path)
     }
 }
