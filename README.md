@@ -1,44 +1,28 @@
 # KungFu (kf)
 
-*The Standalone Version Control System for the Agentic Era.*
+**The Standalone Version Control System for the Agentic Era.**
 
-KungFu is a next-generation, agent-native version control  system (VCS) powered by the Loro CRDT engine. It is designed to replace the rigid, human-first paradigm of Git with a fluid, operation-based system where AI agents and humans collaborate in a continuous, conflict-free stream.
+"KungFu is evolving your code."
 
-## Why KungFu?
+KungFu is a next-generation, agent-native version control system (VCS) powered by the **Loro CRDT engine**. It replaces the rigid, human-first paradigm of Git with a fluid, operation-based system where AI agents and humans collaborate in a continuous, conflict-free stream.
 
-Traditional VCS (Git) treats code as a series of static snapshots. This forces agents to stop, stage, and commit, leading to brittle workflows and complex merge conflicts. 
+## The Evolutionary Loop
 
-**KungFu treats code as a continuous flow of intent.**
-
-- **Agent-First Mechanism:** Agents stream surgical edits (`splice`) directly into the CRDT graph via MCP. No more `git add` errors or broken commit messages.
-- **Mathematical Harmony:** Powered by Loro's `MovableTree` and `Fugue` algorithms, KungFu resolves concurrent edits mathematically. Merge conflicts are effectively obsolete.
-- **The Intent Timeline:** Instead of a list of opaque hashes, KungFu maintains a semantic log of *Intents*. You see the evolution of the codebase through the reasoning of the agents that built it.
-- **Flexible Topology:** Works as a pure P2P system for local speed, or connects to a **Central Dojio** (Remote Server) for team-wide orchestration and human-in-the-loop review.
+1. **Mutate:** An agent (or human) starts a new task. KungFu creates a **Mutation** (an isolated CRDT filter).
+2. **Expression:** The agent performs surgical **Splice** operations. These are recorded as **DNA** segments.
+3. **Transcription:** KungFu continuously **Transcribes** the mutation to the local disk so the agent can run tests.
+4. **Natural Selection:** The agent (or human) calls `kf integrate`. The system subjects the Mutation to the environment (the test suite).
+5. **Evolution:** If the Mutation survives (tests pass), it is woven into the **Organism**. If it fails, the mutation is discarded or refined.
+6. **Osmosis:** The new DNA is instantly shared via **Osmosis** with all other peers in the Dojo.
 
 ## The Metaphor
 
 - **Dojo:** The workspace (Local or Remote).
-- **Stance:** A specific task or feature vector (The "Branch").
-- **Flow:** The continuous background sync of CRDT operations.
-- **Strike:** A hard, immutable cryptographic checkpoint used by CI/CD build servers for deployment.
-
-## Architecture
-
-___
-cud/kf/             CLI entry point & MCP Server
-internal/
-  core/             Loro CRDT wrapper & History (Intent) engine
-  sync/             Streaming transport (WebSockets/P2P)
-  mcp/              MCP Server (The agent gateway)
-pkg/
-  vfs/              Virtual File System (The abstraction)
-___
-
-## Tech Stack
-
-- **Language:** Go (Backend/CLI)
-- **CRDT Engine:** [Loro](https://loro.dev) (Rust via CGO/FFI)
-- **Interface:** MCP (Model Context Protocol)
+- **The DNA:** The Intent Log & Blueprint. The absolute source of truth.
+- **The Organism:** The Trunk / Codebase. The living result of executing the DNA.
+- **Mutation:** A Stance / Edit. An isolated deviation from the DNA.
+- **Transcription:** Checkout / Materialization. Projecting DNA into physical files.
+- **Fossil:** A hard, immutable cryptographic checkpoint used for deployment.
 
 ---
 *KungFu is a standalone research project designed to power autonomous engineering at scale.*
