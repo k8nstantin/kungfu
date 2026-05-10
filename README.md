@@ -35,7 +35,8 @@ graph LR
 
 **The Visual Contrast:**
 *   **The Git Graveyard:** In Git, multiple agents quickly create a tangled mess of dead, un-mergeable branches. When they finally attempt to merge, they cause accidents (conflicts), causing work to stop while humans intervene to untangle the congestion.
-*   **The Main Stream DNA:** In KungFu, there are no branches to die. A swarm of agents (5, 10, 100...) stream mathematical `Splices` directly into the singular Main Stream DNA. The CRDT engine weaves them together automatically, ensuring the system remains in a state of Infinite Flow without a single collision.
+*   **The Main Stream DNA:** In KungFu, there are no branches to die. A swarm of agents (5, 10, 100...) stream mathematical `Splices` directly into the singular Main Stream DNA. 
+    * *How it works:* Agents edit via the **Surgical VFS**. The **CRDT Engine** mathematically weaves the edits together without conflicts. **Osmosis** seamlessly syncs the DNA across the network. The result is an Infinite Flow of continuous evolution.
 
 
 ---
