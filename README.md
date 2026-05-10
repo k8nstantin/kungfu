@@ -4,7 +4,7 @@
 
 **Git is dead. Long live KungFu.**
 
-**Branches are dead.** We have eliminated the endless nightmare of stale branches and repository reconciliation.
+**Branches are dead.** Coralling stale branches and attempting repository reconciliation is Sisyphean work—it never ends. We have eliminated it entirely.
 
 Git was built in 2005 for humans emailing static patches to the Linux kernel mailing list. It is a phenomenal tool for human administration, but it is fundamentally broken for the Agentic Era. When you have a swarm of autonomous AI agents generating 50 lines of code every 3 seconds, asking them to stop, stage, write a commit message, and resolve `<<<< HEAD` merge conflicts is like putting a horse engine in a Tesla.
 
