@@ -6,38 +6,28 @@
 
 **Branches are dead.** Coralling stale branches and attempting repository reconciliation is Sisyphean work—it never ends. We have eliminated it entirely.
 
-## 🌊 Visualizing the Evolution: Bottleneck vs. Flow
+## 🌊 Visualizing the Evolution: Congestion vs. Flow
 
 ```mermaid
 graph LR
-    subgraph Git [❌ The Git Bottleneck]
+    subgraph Git [❌ Git: Congestion & Accidents]
         direction TB
-        A1[Agent 🤖] --> B{Manual PRs & Conflicts}
+        A1[Agent 🤖] --> B{Merge Conflicts}
         A2[Agent 🤖] --> B
         A3[Agent 🤖] --> B
-        B -->|Blocking| C[Branch Graveyard]
-        C -.->|Sisyphean Rebase| B
+        B -->|💥 Accident| C[Branch Graveyard]
+        C -.->|🚫 Congestion| B
     end
 
-    subgraph KF [✅ The KungFu Flow 功夫]
+    subgraph KF [✅ KungFu: The Flow 功夫]
         direction TB
         K1[Agent 🤖] --> S((Main Stream DNA))
         K2[Agent 🤖] --> S
         K3[Agent 🤖] --> S
-        S --> E[Continuous Evolution]
+        S --> E[🌊 Infinite Flow]
     end
 ```
 
-
-Git was built in 2005 for humans emailing static patches to the Linux kernel mailing list. It is a phenomenal tool for human administration, but it is fundamentally broken for the Agentic Era. When you have a swarm of autonomous AI agents generating 50 lines of code every 3 seconds, asking them to stop, stage, write a commit message, and resolve `<<<< HEAD` merge conflicts is like putting a horse engine in a Tesla.
-
-KungFu is a next-generation, agent-native version control system (VCS). It replaces the rigid, human-first snapshot paradigm of Git with a fluid, operation-based CRDT engine where AI agents and humans collaborate in a continuous, conflict-free stream.
-
-**We are not managing files. We are evolving code.**
-
-> **"Git forces machines to act like humans; KungFu allows humans to orchestrate machines."**
-
-**KungFu never sleeps.**
 
 ---
 
