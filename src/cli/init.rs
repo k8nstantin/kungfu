@@ -1,6 +1,7 @@
 use std::fs;
 use anyhow::{Context, Result};
 use crate::core::dojo::Dojo;
+use crate::core::config::KungFuConfig;
 use crate::core::identity::Identity;
 
 pub fn run() -> Result<()> {
@@ -36,6 +37,11 @@ pub fn run() -> Result<()> {
 
     // 3. Create the append-only operations log
     fs::File::create(kf_dir.join("ops.log")).context("Failed to create ops.log")?;
+
+    // 4. Initialize Configuration
+    let config = KungFuConfig::default();
+    config.save(&kf_dir)?;
+
 
     println!("Initialized empty KungFu Dojo in {}", kf_dir.display());
     Ok(())
