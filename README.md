@@ -35,7 +35,7 @@ There are no batches. There are no complex commands to memorize. As an agent typ
 4. **Semantics (The "Why"):** You don't review a 400-line diff of `+` and `-` symbols. You review the **Intent Log**. You see: *"Intent: Refactoring Auth"* ➔ Linked to 12 Splice Operations. You review reasoning, not just raw text.
 5. **Simplicity (Trunk-Only):** No rebasing. No cherry-picking. No stashing. There is only the DNA (The Trunk). You `Mutate` (experiment) and you `Expose` (test). If it passes, it is permanent.
 6. **Chronology (UUIDv7 Time-Travel):** Git relies on chaotic pointer graphs and server timestamps. KungFu assigns a **UUIDv7** to every single file, mutation, and operation. This guarantees that every action is decentralized yet perfectly time-sortable. The UI acts as a DVR, allowing you to slide through the codebase's evolution exactly as it happened, without needing a central clock.
-7. **Active Intelligence (The Self-Aware Codebase):** Git is dumb storage; it just holds text. Because KungFu processes a live stream of operations, the system itself can infer the code. It can automatically generate documentation, flag semantic collisions, and provide deep analytics on how the codebase is evolving over time.
+7. **AI-Powered Active Intelligence (The Self-Aware Codebase):** Git is dumb storage; it just holds text. Because KungFu processes a live stream of operations, the system itself can infer the code. It can automatically generate documentation, flag semantic collisions, and provide deep analytics on how the codebase is evolving over time.
 
 
 ## 📜 Table of Contents
