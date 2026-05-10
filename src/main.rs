@@ -4,6 +4,7 @@ use anyhow::Result;
 mod cli;
 mod core;
 mod mcp;
+mod sync;
 mod pkg;
 
 #[derive(Parser)]
@@ -32,6 +33,11 @@ enum Commands {
     },
     /// View the status of the current Dojo
     Status,
+    /// Start continuous background sync
+    Osmose { 
+        /// Central Dojo URL
+        url: String 
+    },
 }
 
 #[tokio::main]
@@ -53,6 +59,9 @@ async fn main() -> Result<()> {
         }
         Commands::Status => {
             println!("Dojo is quiet. No active flows.");
+        }
+        Commands::Osmose { url } => {
+            sync::osmosis::begin_osmosis(&url).await?;
         }
     }
 

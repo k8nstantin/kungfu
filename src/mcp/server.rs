@@ -40,6 +40,17 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                 "result": {
                     "tools": [
                         {
+                            "name": "kungfu_read",
+                            "description": "Read the current state of a file from the CRDT DNA.",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "path": { "type": "string" }
+                                },
+                                "required": ["path"]
+                            }
+                        },
+                        {
                             "name": "kungfu_splice",
                             "description": "Surgically edit the CRDT codebase.",
                             "inputSchema": {
@@ -60,94 +71,77 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
         "tools/call" => {
             if let Some(params_val) = req.params {
                 if let Ok(call) = serde_json::from_value::<CallParams>(params_val) {
+                    let dojo = state.dojo.lock().await;
+                    let vfs = VirtualFileSystem::new(&dojo.doc);
+
+                    if call.name == "kungfu_read" {
+                        let path = call.arguments.as_ref().and_then(|a| a.get("path")).and_then(|v| v.as_str()).unwrap_or("");
+                        match vfs.find_by_path(path) {
+                            Ok(tid) => {
+                                let content = vfs.read_by_id(tid);
+                                return Json(json!({
+                                    "jsonrpc": "2.0",
+                                    "id": req.id,
+                                    "result": { "content": [{ "type": "text", "text": content }] }
+                                }));
+                            }
+                            Err(e) => {
+                                return Json(json!({
+                                    "jsonrpc": "2.0",
+                                    "id": req.id,
+                                    "error": { "code": -32000, "message": format!("Read failed: {}", e) }
+                                }));
+                            }
+                        }
+                    }
+
                     if call.name == "kungfu_splice" {
                         if let Some(args) = call.arguments {
-                            let _path = args.get("path").and_then(|v| v.as_str()).unwrap_or("");
+                            let path = args.get("path").and_then(|v| v.as_str()).unwrap_or("");
                             let offset = args.get("offset").and_then(|v| v.as_u64()).unwrap_or(0) as usize;
                             let delete_len = args.get("delete_len").and_then(|v| v.as_u64()).unwrap_or(0) as usize;
                             let insert_text = args.get("insert_text").and_then(|v| v.as_str()).unwrap_or("");
 
-                            // Execute the Splice in the Dojo
-                            let dojo = state.dojo.lock().await;
-                            let vfs = VirtualFileSystem::new(&dojo.doc);
-                            
-                            // Mocking the TreeID lookup for now
-                            let mock_target_id = TreeID::new(loro::PeerID::MAX, 0); 
-                            
-                            let op = OpType::Splice { 
-                                offset, 
-                                delete_len, 
-                                insert: insert_text.to_string() 
-                            };
-                            
-                            match vfs.express("active_intent", Some(mock_target_id), op) {
-                                Ok(trace) => {
-                                    let snap_path = state.workspace_dir.join(".kungfu/snapshot.loro");
-                                    let _ = dojo.save(&snap_path);
-
-                                    return Json(json!({
-                                        "jsonrpc": "2.0",
-                                        "id": req.id,
-                                        "result": {
-                                            "content": [{
-                                                "type": "text",
-                                                "text": format!("Operation trace {} successfully committed to the CRDT DNA.", trace.id)
-                                            }]
+                            match vfs.find_by_path(path) {
+                                Ok(tid) => {
+                                    let op = OpType::Splice { offset, delete_len, insert: insert_text.to_string() };
+                                    match vfs.express("active_intent", Some(tid), op) {
+                                        Ok(trace) => {
+                                            let snap_path = state.workspace_dir.join(".kungfu/snapshot.loro");
+                                            let _ = dojo.save(&snap_path);
+                                            return Json(json!({
+                                                "jsonrpc": "2.0", "id": req.id,
+                                                "result": { "content": [{ "type": "text", "text": format!("Committed trace {}", trace.id) }] }
+                                            }));
                                         }
-                                    }));
+                                        Err(e) => {
+                                            return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } }));
+                                        }
+                                    }
                                 }
                                 Err(e) => {
-                                    return Json(json!({
-                                        "jsonrpc": "2.0",
-                                        "id": req.id,
-                                        "error": { "code": -32000, "message": format!("CRDT Splice failed: {}", e) }
-                                    }));
+                                    return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } }));
                                 }
                             }
                         }
                     }
                 }
             }
-            Json(json!({
-                "jsonrpc": "2.0",
-                "id": req.id,
-                "error": { "code": -32602, "message": "Invalid tool parameters" }
-            }))
+            Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32602, "message": "Invalid parameters" } }))
         }
-        _ => {
-            Json(json!({
-                "jsonrpc": "2.0",
-                "id": req.id,
-                "error": { "code": -32601, "message": "Method not found" }
-            }))
-        }
+        _ => { Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32601, "message": "Method not found" } })) }
     }
 }
 
 pub async fn run_server() -> Result<()> {
     let current_dir = std::env::current_dir().context("Failed to get current directory")?;
     let kf_dir = current_dir.join(".kungfu");
-    
-    let dojo = if kf_dir.exists() {
-        Dojo::load(&kf_dir.join("snapshot.loro")).unwrap_or_else(|_| Dojo::new())
-    } else {
-        Dojo::new()
-    };
-
-    let state = Arc::new(AppState {
-        dojo: Mutex::new(dojo),
-        workspace_dir: current_dir,
-    });
-
-    let app = Router::new()
-        .route("/mcp", post(handle_rpc))
-        .with_state(state);
-
+    let dojo = if kf_dir.exists() { Dojo::load(&kf_dir.join("snapshot.loro")).unwrap_or_else(|_| Dojo::new()) } else { Dojo::new() };
+    let state = Arc::new(AppState { dojo: Mutex::new(dojo), workspace_dir: current_dir });
+    let app = Router::new().route("/mcp", post(handle_rpc)).with_state(state);
     let addr = SocketAddr::from(([127, 0, 0, 1], 8766));
     println!("Starting KungFu MCP Gateway on {}", addr);
-    
     let listener = TcpListener::bind(addr).await?;
     axum::serve(listener, app).await?;
-
     Ok(())
 }
