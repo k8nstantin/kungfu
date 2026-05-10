@@ -26,6 +26,9 @@ KungFu is a next-generation, agent-native version control system (VCS). It repla
 
 **KungFu is dark matter.** It is the invisible, high-frequency stream that actually holds the universe together. It captures the 95% of engineering that Git misses: the sub-second vibrations of thought, the surgical splices of intent, and the continuous flow of evolution that happens *between* the snapshots. 
 
+**Automation over Administration.** 
+Because KungFu handles the mathematical complexity of state resolution invisibly, the "Human Tax" is eliminated. You do not need to memorize a myriad of complex CLI commands, flag combinations, or disaster-recovery scenarios (like detached heads or broken rebases). You just write code. KungFu does the rest.
+
 While Git records history, KungFu powers existence.
 
 
