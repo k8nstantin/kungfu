@@ -282,6 +282,19 @@ kf transcribe ./src
 ```
 
 ---
+
+
+---
+
+## 🗺 What We Are Building Next
+
+KungFu is in active development. Here is what is coming next in the Dojo:
+
+1. **Phase 3: The Osmosis Server (Central Dojo):** A high-performance, stateless Rust server (axum + tokio-websockets) that will allow multiple agents and humans to stream CRDT edits to each other in real-time, backed by GCS/S3 cold storage.
+2. **The Intent Dashboard:** A web-based UI where humans can visualize the CRDT evolution. You won't look at diffs; you will click an "Intent" and watch the code type itself out like a DVR, allowing you to approve or reject an agent's reasoning instantly.
+3. **OpenPraxis Integration:** Natively wiring the KungFu MCP server into [OpenPraxis](https://github.com/k8nstantin/OpenPraxis) so that autonomous agent swarms can drop Git entirely and evolve code mathematically.
+4. **Binary File Support (LWW):** Hardening the Surgical VFS to support images and compiled assets using Last-Write-Wins CRDT registers.
+
 ## 🤝 The Open Source Vision
 
 > *"Everyone is welcome, of course. A single human idea is worth millions of lines of tokenized text, and learning is the best reward."*
