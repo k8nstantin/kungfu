@@ -42,6 +42,28 @@ You write code for hours. You stop. You navigate a myriad of complex CLI command
 **KungFu is a Continuous Streaming system built for agents (with humans in the loop).**
 There are no batches. There are no complex commands to memorize. As an agent types, every single character deletion or insertion is streamed in real-time as a microscopic **CRDT** (Conflict-free Replicated Data Type) operation over a WebSocket. Because the edits are streamed instantly and applied via pure mathematics (Fugue/MovableTree algorithms), they weave together perfectly. **You cannot have a merge conflict if you never merge.**
 
+```mermaid
+sequenceDiagram
+    participant A as Agent
+    participant G as Git
+    participant K as KungFu
+
+    Note over A,G: ❌ Git: The Batch Paradigm
+    A->>G: Edit 50 lines over 2 hours
+    A->>G: git add .
+    A->>G: git commit -m "fix"
+    A->>G: git push
+    G-->>A: Error: Merge Conflict!
+
+    Note over A,K: ✅ KungFu: The Streaming Paradigm
+    A->>K: Splice(offset:10)
+    K-->>K: Sync delta (1ms)
+    A->>K: Splice(offset:42)
+    K-->>K: Sync delta (1ms)
+    Note over K: Math resolves all edits instantly.
+```
+
+
 
 ---
 
@@ -157,6 +179,26 @@ Because of this architecture, **KungFu has no branches.** Everything happens on 
 The most common question engineers ask when they hear "Branchless Trunk-Based Development" is: *If everyone is editing the Trunk simultaneously, how do we run tests without the codebase constantly being broken?*
 
 Here is how KungFu handles Continuous Integration:
+
+
+```mermaid
+graph TD
+    subgraph The DNA (Main Stream)
+        A[Stable Trunk] --> B[Stable Trunk]
+    end
+
+    subgraph Agent Workspace
+        B -.->|kf mutate| C(Ghost State)
+        C -->|Splice| D(Pending Edit)
+        D -->|kf transcribe| E[Local Disk]
+        E -->|go test| F{Tests Pass?}
+        F -->|No| C
+    end
+
+    F -->|Yes: kf expose| G{Natural Selection CI}
+    G -->|Pass| H[Woven into Stable Trunk]
+    G -->|Fail| C
+```
 
 ### 1. The "Ghost State" (Pending Mutations)
 When an agent starts a task (`kf mutate`), their edits are mathematically streamed into the Trunk, but they are flagged as **Pending**.
