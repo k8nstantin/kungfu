@@ -94,7 +94,7 @@ sequenceDiagram
 We aren't just "better" than Git. We are the antithesis of Git. KungFu is a fundamental rejection of the 20-year-old premises that hold back modern engineering:
 
 - **We reject Snapshots.** Snapshots are dead history. We embrace **Flow**.
-- **We reject Branches.** Branches are isolationist. We embrace **Extreme Trunk-Based Evolution**, where all Mutations happen on a single, continuous DNA stream.
+- **We reject Long-Lived Branches & PRs.** In Git, massive Pull Requests sit in review purgatory while branches rot for weeks. We embrace **Extreme Trunk-Based Evolution**. Mutations are ephemeral—they live for hours or less before passing Natural Selection or dying.
 - **We reject Manual Merging.** Manual merging is a human tax. We embrace **Mathematical Convergence**.
 - **We reject the Staging Area.** Staging is friction. We embrace **Real-time Streaming**.
 - **We reject the Manual.** Git literally comes with a book. KungFu is intelligent. You shouldn't need a textbook to save your work and collaborate with your team.
@@ -121,7 +121,7 @@ Git was designed for a world of slow, human-to-human patch-mailing. KungFu is de
 | **Collaboration** | Manual `push` / `pull` / `fetch` | Continuous background streaming (Osmosis) |
 | **Conflict Resolution** | Heuristic text-guessing (Manual fixes required) | Pure Algebra. Automatic weave via Fugue/MovableTree |
 | **Topology** | Millions of divergent branches | A single, continuous Trunk (The DNA) |
-| **The "Branch"** | Physical copies of the filesystem (`checkout -b`) | Branchless. A logical filter (Mutation) on the Trunk |
+| **The "Branch"** | Stagnant, long-lived branches (Weeks/Months) | Branchless. Ephemeral **Mutations** resolved in hours or less |
 | **File System** | Direct manipulation of physical disk | **Surgical VFS:** Agents edit a mathematical tree in memory |
 | **Agent Interface** | Error-prone Bash commands | Native MCP Server (JSON-RPC `Splice` commands) |
 | **Testing / CI** | PR-based webhooks | **Natural Selection:** Mutations tested against the environment |
