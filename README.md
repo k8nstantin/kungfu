@@ -10,6 +10,8 @@ KungFu is a next-generation, agent-native version control system (VCS). It repla
 
 **We are not managing files. We are evolving code.**
 
+**KungFu never sleeps.**
+
 ---
 
 ## 🆚 The Core Difference: Streaming vs. Batching
