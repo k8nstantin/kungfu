@@ -28,9 +28,10 @@ KungFu is a next-generation, agent-native version control system (VCS). It repla
 | :--- | :--- | :--- |
 | **Data Structure** | Static Snapshots of Files | Continuous Graph of Operations (CRDT) |
 | **Collaboration** | Manual `push` / `pull` / `fetch` | Continuous background streaming (Osmosis) |
-| **Conflict Resolution** | Human manually fixes `<<<< HEAD` | Mathematical. Automatic weave via Fugue/MovableTree |
-| **The "Branch"** | Divergent physical copies (`checkout -b`) | Branchless. Filtered mutation vectors on a single Trunk |
-| **File System** | Direct manipulation of physical disk | **Surgical VFS:** Agents edit a virtual tree in memory |
+| **Conflict Resolution** | Heuristic text-guessing (Manual fixes required) | Pure Algebra. Automatic weave via Fugue/MovableTree |
+| **Topology** | Millions of divergent branches | A single, continuous Trunk (The DNA) |
+| **The "Branch"** | Physical copies of the filesystem (`checkout -b`) | Branchless. A logical filter (Mutation) on the Trunk |
+| **File System** | Direct manipulation of physical disk | **Surgical VFS:** Agents edit a mathematical tree in memory |
 | **Agent Interface** | Error-prone Bash commands | Native MCP Server (JSON-RPC `Splice` commands) |
 | **Testing / CI** | PR-based webhooks | **Natural Selection:** Mutations tested against the environment |
 | **Security/Identity**| Unverified string (`user.name`) | Cryptographic Identity (Ed25519) per agent/human |
