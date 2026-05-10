@@ -34,6 +34,7 @@ There are no batches. There are no commits. As an agent types, every single char
 3. **Safety (Cryptographic Identity):** Git authorship can be spoofed trivially. In KungFu, every single character typed is signed by an Ed25519 Private Key. You can cryptographically prove exactly which agent wrote which line.
 4. **Semantics (The "Why"):** You don't review a 400-line diff of `+` and `-` symbols. You review the **Intent Log**. You see: *"Intent: Refactoring Auth"* ➔ Linked to 12 Splice Operations. You review reasoning, not just raw text.
 5. **Simplicity (Trunk-Only):** No rebasing. No cherry-picking. No stashing. There is only the DNA (The Trunk). You `Mutate` (experiment) and you `Expose` (test). If it passes, it is permanent.
+6. **Chronology (UUIDv7 Time-Travel):** Git relies on chaotic pointer graphs and server timestamps. KungFu assigns a **UUIDv7** to every single file, mutation, and operation. This guarantees that every action is decentralized yet perfectly time-sortable. The UI acts as a DVR, allowing you to slide through the codebase's evolution exactly as it happened, without needing a central clock.
 
 
 ## 📜 Table of Contents
