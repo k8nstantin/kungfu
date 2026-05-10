@@ -64,7 +64,7 @@ There are no batches. There are no complex commands to memorize. As an agent typ
 We aren't just "better" than Git. We are the antithesis of Git. KungFu is a fundamental rejection of the 20-year-old premises that hold back modern engineering:
 
 - **We reject Snapshots.** Snapshots are dead history. We embrace **Flow**.
-- **We reject Branches.** Branches are isolationist. We embrace **Mutations** on a single DNA.
+- **We reject Branches.** Branches are isolationist. We embrace **Extreme Trunk-Based Evolution**, where all Mutations happen on a single, continuous DNA stream.
 - **We reject Manual Merging.** Manual merging is a human tax. We embrace **Mathematical Convergence**.
 - **We reject the Staging Area.** Staging is friction. We embrace **Real-time Streaming**.
 
