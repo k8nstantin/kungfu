@@ -107,12 +107,16 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                                     let op = OpType::Splice { offset, delete_len, insert: insert_text.to_string() };
                                     match vfs.express("active_intent", Some(tid), op) {
                                         Ok(trace) => {
-                                            let snapshot_bytes = dojo.export_snapshot();
-                                            drop(dojo); // Release the mutex BEFORE async disk I/O
+                                            // GAP-003 FIX: Append to the WAL instead of full snapshot
+                                            let trace_bytes = bincode::serde::encode_to_vec(&trace, bincode::config::standard()).unwrap_or_default();
+                                            drop(dojo); // Release mutex
                                             
-                                            let snap_path = state.workspace_dir.join(".kungfu/snapshot.loro");
+                                            let log_path = state.workspace_dir.join(".kungfu/ops.log");
                                             tokio::spawn(async move {
-                                                let _ = tokio::fs::write(snap_path, snapshot_bytes).await;
+                                                use tokio::io::AsyncWriteExt;
+                                                if let Ok(mut file) = tokio::fs::OpenOptions::new().append(true).open(log_path).await {
+                                                    let _ = file.write_all(&trace_bytes).await;
+                                                }
                                             });
 
                                             return Json(json!({

@@ -3,3 +3,4 @@ pub mod identity;
 pub mod history;
 pub mod vfs;
 pub mod seed;
+pub mod config;

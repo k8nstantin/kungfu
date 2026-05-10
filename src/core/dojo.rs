@@ -11,7 +11,10 @@ impl Dojo {
     pub fn new() -> Self {
         let doc = LoroDoc::new();
         let _tree = doc.get_tree("vfs");
-        let _meta = doc.get_map("meta");
+        let meta = doc.get_map("meta");
+        // The Trunk Identity: The chronological birth of this codebase
+        meta.insert("trunk_id", crate::pkg::id::must_new()).unwrap();
+
         Dojo { doc }
     }
 

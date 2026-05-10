@@ -1,0 +1,7 @@
+server:
+  mcp_port: 8766
+  osmosis_port: 8767
+storage:
+  snapshot_policy:
+    mode: threshold
+    max_unflushed_operations: 1000
