@@ -29,7 +29,7 @@ There are no batches. There are no complex commands to memorize. As an agent typ
 
 ## ⚡️ The KungFu Advantage
 
-*Git forces machines to act like humans. KungFu allows humans to orchestrate machines.*
+> *"Git forces machines to act like humans. KungFu allows humans to orchestrate machines."*
 
 1. **Speed (Zero-Cost Edits):** Agents don't rewrite 2,000-line files to change a variable. They send a 50-byte `Splice` JSON payload over a local WebSocket. The math updates in memory in under a millisecond.
 2. **Scale (Infinite Concurrency):** If 5 agents edit the same file in Git, the system crashes with `<<<< HEAD`. In KungFu, 1,000 agents can edit the exact same file simultaneously. The CRDT math guarantees a perfect, conflict-free merge.
