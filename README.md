@@ -107,7 +107,7 @@ sequenceDiagram
 We aren't just "better" than Git. We are the antithesis of Git. KungFu is a fundamental rejection of the 20-year-old premises that hold back modern engineering:
 
 - **We reject Snapshots.** Snapshots are dead history. We embrace **Flow**.
-- **We reject Long-Lived Branches & PRs.** In Git, massive Pull Requests sit in review purgatory while branches rot for weeks. We embrace **Extreme Trunk-Based Evolution**. Mutations are ephemeral—they live for hours or less before passing Natural Selection or dying.
+- **We reject the Branch Graveyard.** In Git, developers constantly mismanage branches. They lay around rotting for months, becoming impossible to organize and guaranteeing merge conflicts. We embrace **Extreme Trunk-Based Evolution**. There is only one timeline. Mutations are ephemeral—they live for hours or less before passing Natural Selection or dying.
 - **We reject Manual Merging.** Manual merging is a human tax. We embrace **Mathematical Convergence**.
 - **We reject the Staging Area.** Staging is friction. We embrace **Real-time Streaming**.
 - **We reject the Manual.** Git literally comes with a book. KungFu is intelligent. You shouldn't need a textbook to save your work and collaborate with your team.
