@@ -19,15 +19,10 @@ KungFu is decentralized by default.
 - Use state-based reconciliation for sync (Automerge-like or Loro-native sync).
 - Never require a central server for a `kf stance` to be productive.
 
-### 4. Git Symbiosis
-KungFu is not a replacement for GitHub; it is a high-speed buffer for it.
-- Every `kf strike` must result in a clean, human-readable Git commit.
-- Maintain a clear mapping between Loro Version Vectors and Git Commit Hashes.
-- **One-Way Export Only:** KungFu DOES NOT ingest Git commits. If a human wants to edit code, they use the `kf` client or the KungFu UI. Git is strictly a read-only publication target for CI/CD compatibility.
-
-### 5. Deterministic Chronology (UUIDv+)
-All entities, stances, and operational traces must be identified using UUIDv7. This ensures IDs are decentralized (safe for P2P generation) while remaining chronologically sortable without relying on external timestamps.
-
+### 4. Absolute Standalone System
+KungFu DOES NOT integrate with Git. It is the end-to-end source of truth from development to deployment.
+- Build servers must use `kf checkout` to materialize code for deployment.
+- Git is considered a legacy human format and is explicitly not supported.
 
 ## Architectural Patterns
 

@@ -20,7 +20,7 @@ Traditional VCS (Git) treats code as a series of static snapshots. This forces a
 - **Dojo:** The workspace (Local or Remote).
 - **Stance:** A specific task or feature vector (The "Branch").
 - **Flow:** The continuous background sync of CRDT operations.
-- **Strike:** A hard, immutable checkpoint exported to legacy Git (One-Way Output only).
+- **Strike:** A hard, immutable cryptographic checkpoint used by CI/CD build servers for deployment.
 
 ## Architecture
 
