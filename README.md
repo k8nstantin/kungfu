@@ -16,6 +16,19 @@ KungFu is a next-generation, agent-native version control system (VCS). It repla
 
 ---
 
+
+
+---
+
+## 🌌 The Invisible Force: Git is Matter, KungFu is Dark Matter
+
+**Git is standard matter.** It is observable, static, and heavy. It deals with the visible artifacts of coding: files, snapshots, and commits. It is what we see after the work is done.
+
+**KungFu is dark matter.** It is the invisible, high-frequency stream that actually holds the universe together. It captures the 95% of engineering that Git misses: the sub-second vibrations of thought, the surgical splices of intent, and the continuous flow of evolution that happens *between* the snapshots. 
+
+While Git records history, KungFu powers existence.
+
+
 ## 🆚 The Core Difference: Streaming vs. Batching
 
 When developers ask, *"How is this different from Git?"* The answer lies in mathematics and physics. 
