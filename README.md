@@ -10,6 +10,8 @@ KungFu is a next-generation, agent-native version control system (VCS). It repla
 
 **We are not managing files. We are evolving code.**
 
+> **"Git forces machines to act like humans; KungFu allows humans to orchestrate machines."**
+
 **KungFu never sleeps.**
 
 ---
