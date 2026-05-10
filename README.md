@@ -55,6 +55,22 @@ There are no batches. There are no complex commands to memorize. As an agent typ
 7. **AI-Powered Active Intelligence (The Self-Aware Codebase):** Git is dumb storage; it just holds text. Because KungFu processes a live stream of operations, the system itself can infer the code. It can automatically generate documentation, flag semantic collisions, and provide deep analytics on how the codebase is evolving over time.
 
 
+
+
+---
+
+## 🥊 KungFu is Anti-Git
+
+We aren't just "better" than Git. We are the antithesis of Git. KungFu is a fundamental rejection of the 20-year-old premises that hold back modern engineering:
+
+- **We reject Snapshots.** Snapshots are dead history. We embrace **Flow**.
+- **We reject Branches.** Branches are isolationist. We embrace **Mutations** on a single DNA.
+- **We reject Manual Merging.** Manual merging is a human tax. We embrace **Mathematical Convergence**.
+- **We reject the Staging Area.** Staging is friction. We embrace **Real-time Streaming**.
+
+Git was designed for a world of slow, human-to-human patch-mailing. KungFu is designed for a world of high-frequency, machine-to-machine evolution.
+
+
 ## 📜 Table of Contents
 1. [The Paradigm Shift: KungFu vs. Git](#-the-paradigm-shift-kungfu-vs-git)
 2. [Why We Built It in Rust](#-the-engine-why-rust)
