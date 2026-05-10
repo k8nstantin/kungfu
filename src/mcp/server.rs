@@ -107,8 +107,14 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                                     let op = OpType::Splice { offset, delete_len, insert: insert_text.to_string() };
                                     match vfs.express("active_intent", Some(tid), op) {
                                         Ok(trace) => {
+                                            let snapshot_bytes = dojo.export_snapshot();
+                                            drop(dojo); // Release the mutex BEFORE async disk I/O
+                                            
                                             let snap_path = state.workspace_dir.join(".kungfu/snapshot.loro");
-                                            let _ = dojo.save(&snap_path);
+                                            tokio::spawn(async move {
+                                                let _ = tokio::fs::write(snap_path, snapshot_bytes).await;
+                                            });
+
                                             return Json(json!({
                                                 "jsonrpc": "2.0", "id": req.id,
                                                 "result": { "content": [{ "type": "text", "text": format!("Committed trace {}", trace.id) }] }
