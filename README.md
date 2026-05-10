@@ -81,7 +81,8 @@ Git was designed for a world of slow, human-to-human patch-mailing. KungFu is de
 3. [The CRDT Magic (Loro)](#-the-crdt-magic-loro)
 4. [The Surgical VFS](#-the-surgical-vfs)
 5. [The Evolutionary Loop](#-the-evolutionary-loop-how-it-works)
-6. [Getting Started](#-getting-started)
+6. [How Do We Test Without Branches?](#-faq-how-do-we-test-without-branches)
+7. [Getting Started](#-getting-started)
 
 ---
 
@@ -147,6 +148,31 @@ Because of this architecture, **KungFu has no branches.** Everything happens on 
 6. **Osmose:** The new DNA is shared via background P2P sync with all peers. (`kf osmose`)
 
 ---
+
+
+---
+
+## 🤔 FAQ: How Do We Test Without Branches?
+
+The most common question engineers ask when they hear "Branchless Trunk-Based Development" is: *If everyone is editing the Trunk simultaneously, how do we run tests without the codebase constantly being broken?*
+
+Here is how KungFu handles Continuous Integration:
+
+### 1. The "Ghost State" (Pending Mutations)
+When an agent starts a task (`kf mutate`), their edits are mathematically streamed into the Trunk, but they are flagged as **Pending**.
+If *you* pull down the code, you won't see the agent's broken code because your default view filters out Pending mutations. The Trunk remains completely stable. The agent, however, sees the Trunk *plus* their pending mutation.
+
+### 2. Local Transcription (`kf transcribe`)
+Before an agent can finalize their work, they test it.
+KungFu takes the current Trunk, overlays the agent's Pending mutation, and materializes those files onto a temporary disk directory. The agent runs `go test` or `docker build`. If it fails, they keep splicing. The Trunk remains safe.
+
+### 3. Atomic Natural Selection (`kf expose`)
+In Git, you run CI on a PR, get a green checkmark, and click "Merge." But if someone else merged code while you were waiting, your "green" code might break `main`. 
+
+In KungFu, Testing and Merging are a single atomic operation:
+1. The agent calls `kf expose`.
+2. The Central Dojo weaves the absolute latest Trunk DNA with the agent's mutation and runs the Global CI pipeline.
+3. **Survival:** If the tests pass, the "Pending" flag is permanently removed. The code is officially woven into the stable Trunk. If it fails, the mutation is rejected before it ever touches the stable stream.
 
 ## 🚀 Getting Started
 
