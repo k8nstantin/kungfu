@@ -56,6 +56,14 @@ In Git, work happens in the dark. A developer or agent disappears onto a branch 
 - **The Osmosis Stream (The Live Ticker):** The Dashboard visualizes the CRDT operation flow not as static files, but as a live ticker of events (e.g., `[10:42] Agent A spliced 14 lines in auth.go`). Humans achieve total God-mode situational awareness of the Swarm's activities.
 
 ### Symmetric Visibility (The Code is the Communication Bus)
+
+### Universal Symmetric Awareness (Total Dojo Transparency)
+Symmetric visibility extends beyond the text buffer. Humans and agents share a unified, real-time awareness of the entire Dojo state. 
+
+- **Symmetric Cursors:** Humans see agent cursors; agents 'see' human cursors. This spatial awareness provides the primary context for collaboration.
+- **Shared Metadata:** Any metadata attached to a VFS node (UUIDv7, kind, custom tags) is instantly visible to all actors. 
+- **The Unified Reality:** There is no 'hidden' or 'local-only' state in the flow. If a human begins a mutation, the agents see the ripple. If an agent shifts its intent, the human sees the update. The entire architectural concept—DNA, Mutations, and the Organism—is a shared, transparent reality.
+
 Because humans and agents are connected to the exact same continuous CRDT stream, the barrier between "Human Workspace" and "Machine Workspace" is eliminated. 
 
 - **Bi-Directional Presence:** If a human opens `auth.go` in their IDE, their local `kf` client broadcasts their presence. Any agent operating in that file is instantly notified via the MCP server: *"Human operator has entered the file."*
