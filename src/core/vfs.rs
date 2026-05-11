@@ -103,7 +103,27 @@ impl<'a> VirtualFileSystem<'a> {
             fs::create_dir_all(destination)?;
         }
 
+        // 1. Get all active nodes in the CRDT
         let nodes = self.tree.get_nodes(false);
+        
+        // 2. Track what paths we are writing so we can delete ghost files
+        let mut active_paths = std::collections::HashSet::new();
+
+        for node in &nodes {
+            if let Ok(p) = self.resolve_path(node.id) {
+                active_paths.insert(destination.join(&p));
+            }
+        }
+
+        // 3. Clean up physical Ghost Files (Deleted in CRDT but still on disk)
+        for entry in walkdir::WalkDir::new(destination).into_iter().filter_map(|e| e.ok()) {
+            let p = entry.path().to_path_buf();
+            if p.is_file() && !active_paths.contains(&p) && !p.to_string_lossy().contains(".kungfu") {
+                let _ = fs::remove_file(&p);
+            }
+        }
+
+        // 4. Materialize the active DNA
         for node in nodes {
             let node_id = node.id;
             let path = self.resolve_path(node_id)?;
