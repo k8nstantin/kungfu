@@ -1,5 +1,7 @@
 use anyhow::{Context, Result};
 use loro::{LoroDoc, LoroTree, TreeID};
+use loro_internal::cursor::{Cursor, Side};
+use std::collections::HashMap;
 use crate::core::history::{OpType, OperationTrace};
 use crate::pkg::id;
 use std::fs;
@@ -182,6 +184,68 @@ impl<'a> VirtualFileSystem<'a> {
             path.push(c);
         }
         Ok(path)
+    }
+
+
+    /// Drops a mathematical Cursor at a specific string offset in a file.
+    /// The cursor attaches to the underlying PeerID/Counter, so it floats safely
+    /// if concurrent edits happen above it.
+    pub fn drop_cursor(&self, target_id: TreeID, offset: usize, metadata: &str) -> Result<String> {
+        let text_id = format!("file_{}", target_id);
+        let text = self.doc.get_text(text_id.as_str());
+        
+        let cursor = text.get_cursor(offset, Side::Middle)
+            .context("Failed to create Loro Cursor")?;
+            
+        let cursor_id = format!("cursor_{}", id::must_new());
+        
+        // Store the cursor and metadata in a global map
+        let cursors_map = self.doc.get_map("vfs_cursors");
+        
+        // We serialize the cursor state to store it
+        let cursor_bytes = cursor.encode();
+        
+        let mut payload = HashMap::new();
+        payload.insert("target_id".to_string(), target_id.to_string());
+        payload.insert("cursor".to_string(), hex::encode(cursor_bytes));
+        payload.insert("metadata".to_string(), metadata.to_string());
+        
+        let json_payload = serde_json::to_string(&payload)?;
+        cursors_map.insert(cursor_id.as_str(), json_payload)
+            .map_err(|e| anyhow::anyhow!("Failed to store cursor metadata: {:?}", e))?;
+            
+        Ok(cursor_id)
+    }
+
+    /// Reads all active cursors for a given file, resolving their current
+    /// mathematical offset in real-time.
+    pub fn read_cursors(&self, target_id: TreeID) -> Result<Vec<serde_json::Value>> {
+        let cursors_map = self.doc.get_map("vfs_cursors");
+        let mut active_cursors = Vec::new();
+        
+        let map_val = cursors_map.get_value();
+        if let Ok(map) = map_val.into_map() {
+            for (_, val) in map.iter() {
+                if let Some(json_arc) = val.as_string() {
+                    let json_str = json_arc.as_str();
+                    if let Ok(mut payload) = serde_json::from_str::<serde_json::Value>(json_str) {
+                        if payload.get("target_id").and_then(|v| v.as_str()) == Some(target_id.to_string().as_str()) {
+                            if let Some(hex_cursor) = payload.get("cursor").and_then(|v| v.as_str()) {
+                                if let Ok(bytes) = hex::decode(hex_cursor) {
+                                    if let Ok(cursor) = Cursor::decode(&bytes) {
+                                        if let Ok(current_pos) = self.doc.get_cursor_pos(&cursor) {
+                                            payload["current_offset"] = serde_json::json!(current_pos.current.pos);
+                                            active_cursors.push(payload);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Ok(active_cursors)
     }
 
     pub fn list_nodes(&self) -> Result<Vec<(String, String)>> {
