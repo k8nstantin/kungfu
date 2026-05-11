@@ -51,6 +51,19 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                             }
                         },
                         {
+                            "name": "kungfu_move",
+                            "description": "Move or rename a file/directory in the VFS.",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "old_path": { "type": "string" },
+                                    "new_parent_path": { "type": "string" },
+                                    "new_name": { "type": "string" }
+                                },
+                                "required": ["old_path", "new_parent_path", "new_name"]
+                            }
+                        },
+                        {
                             "name": "kungfu_create",
                             "description": "Create a new file or directory in the VFS.",
                             "inputSchema": {
@@ -103,6 +116,52 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                                     "id": req.id,
                                     "error": { "code": -32000, "message": format!("Read failed: {}", e) }
                                 }));
+                            }
+                        }
+                    }
+
+                    if call.name == "kungfu_move" {
+                        if let Some(args) = call.arguments {
+                            let old_path = args.get("old_path").and_then(|v| v.as_str()).unwrap_or("");
+                            let new_parent = args.get("new_parent_path").and_then(|v| v.as_str()).unwrap_or("");
+                            let new_name = args.get("new_name").and_then(|v| v.as_str()).unwrap_or("");
+
+                            let dojo = state.dojo.lock().await;
+                            let vfs = VirtualFileSystem::new(&dojo.doc);
+                            
+                            match vfs.find_by_path(old_path) {
+                                Ok(tid) => {
+                                    // 1. Rename metadata
+                                    if let Ok(meta) = dojo.doc.get_tree("vfs").get_meta(tid) {
+                                        let _ = meta.insert("name", new_name);
+                                    }
+                                    
+                                    // 2. Move node
+                                    let mut new_parent_id = "".to_string();
+                                    if !new_parent.is_empty() {
+                                        if let Ok(pid) = vfs.find_by_path(new_parent) {
+                                            new_parent_id = pid.to_string();
+                                        }
+                                    }
+
+                                    let op = OpType::Move { new_parent: new_parent_id };
+                                    match vfs.express("active_intent", Some(tid), op) {
+                                        Ok(trace) => {
+                                            let trace_bytes = bincode::serde::encode_to_vec(&trace, bincode::config::standard()).unwrap_or_default();
+                                            drop(dojo);
+                                            let log_path = state.workspace_dir.join(".kungfu/ops.log");
+                                            tokio::spawn(async move {
+                                                use tokio::io::AsyncWriteExt;
+                                                if let Ok(mut file) = tokio::fs::OpenOptions::new().append(true).open(log_path).await {
+                                                    let _ = file.write_all(&trace_bytes).await;
+                                                }
+                                            });
+                                            return Json(json!({ "jsonrpc": "2.0", "id": req.id, "result": { "content": [{ "type": "text", "text": format!("Moved to {} at trace {}", new_name, trace.id) }] } }));
+                                        }
+                                        Err(e) => { return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } })); }
+                                    }
+                                }
+                                Err(e) => { return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } })); }
                             }
                         }
                     }
