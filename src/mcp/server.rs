@@ -10,10 +10,10 @@ use std::path::PathBuf;
 use crate::core::dojo::Dojo;
 use crate::core::vfs::VirtualFileSystem;
 use crate::core::history::OpType;
-use loro::TreeID;
 
 #[derive(serde::Deserialize)]
 struct McpRequest {
+    #[allow(dead_code)]
     jsonrpc: String,
     id: u64,
     method: String,
@@ -94,8 +94,8 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
             }))
         }
         "tools/call" => {
-            if let Some(params_val) = req.params {
-                if let Ok(call) = serde_json::from_value::<CallParams>(params_val) {
+            if let Some(params_val) = req.params
+                && let Ok(call) = serde_json::from_value::<CallParams>(params_val) {
                     println!("Waiting for lock..."); let dojo = state.dojo.lock().await; println!("Lock acquired.");
                     let vfs = VirtualFileSystem::new(&dojo.doc);
 
@@ -120,8 +120,8 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                         }
                     }
 
-                    if call.name == "kungfu_move" {
-                        if let Some(args) = call.arguments {
+                    if call.name == "kungfu_move"
+                        && let Some(args) = call.arguments {
                             let old_path = args.get("old_path").and_then(|v| v.as_str()).unwrap_or("");
                             let new_parent = args.get("new_parent_path").and_then(|v| v.as_str()).unwrap_or("");
                             let new_name = args.get("new_name").and_then(|v| v.as_str()).unwrap_or("");
@@ -138,11 +138,10 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                                     
                                     // 2. Move node
                                     let mut new_parent_id = "".to_string();
-                                    if !new_parent.is_empty() {
-                                        if let Ok(pid) = vfs.find_by_path(new_parent) {
+                                    if !new_parent.is_empty()
+                                        && let Ok(pid) = vfs.find_by_path(new_parent) {
                                             new_parent_id = pid.to_string();
                                         }
-                                    }
 
                                     let op = OpType::Move { new_parent: new_parent_id };
                                     match vfs.express("active_intent", Some(tid), op) {
@@ -164,10 +163,9 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                                 Err(e) => { return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } })); }
                             }
                         }
-                    }
 
-                    if call.name == "kungfu_create" {
-                        if let Some(args) = call.arguments {
+                    if call.name == "kungfu_create"
+                        && let Some(args) = call.arguments {
                             let path = args.get("path").and_then(|v| v.as_str()).unwrap_or("");
                             let kind = args.get("kind").and_then(|v| v.as_str()).unwrap_or("file");
 
@@ -199,10 +197,9 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                                 }
                             }
                         }
-                    }
 
-                    if call.name == "kungfu_splice" {
-                        if let Some(args) = call.arguments {
+                    if call.name == "kungfu_splice"
+                        && let Some(args) = call.arguments {
                             let path = args.get("path").and_then(|v| v.as_str()).unwrap_or("");
                             let offset = args.get("offset").and_then(|v| v.as_u64()).unwrap_or(0) as usize;
                             let delete_len = args.get("delete_len").and_then(|v| v.as_u64()).unwrap_or(0) as usize;
@@ -240,9 +237,7 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                                 }
                             }
                         }
-                    }
                 }
-            }
             Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32602, "message": "Invalid parameters" } }))
         }
         _ => { Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32601, "message": "Method not found" } })) }
