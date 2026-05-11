@@ -46,3 +46,11 @@ Agents interact with a **Surgical VFS** that translates standard file operations
 ### Local Persistence
 - **WAL (Write-Ahead Log):** Operations are saved instantly to `.kungfu/ops.log`.
 - **Materialized View:** The DNA is continuously **Transcribed** to the physical filesystem so legacy tools work unmodified.
+
+
+## 9. Situational Awareness (The End of "Dark Work")
+
+In Git, work happens in the dark. A developer or agent disappears onto a branch for days and returns with a massive, un-mergeable PR. KungFu eliminates "Dark Work" through real-time Liveness and Presence.
+
+- **Spatial Presence (The Radar):** Agents and Humans constantly broadcast their focus via the WebSocket. The UI/CLI displays exactly who is reading or splicing which block of code in real-time. This prevents redundant work and allows actors to avoid 'hot' zones.
+- **The Osmosis Stream (The Live Ticker):** The Dashboard visualizes the CRDT operation flow not as static files, but as a live ticker of events (e.g., `[10:42] Agent A spliced 14 lines in auth.go`). Humans achieve total God-mode situational awareness of the Swarm's activities.
