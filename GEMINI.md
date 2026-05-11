@@ -10,7 +10,7 @@ KungFu does not store files; it stores a graph of operations. All data persisten
 ### 2. Agent-Native Design
 The primary user of KungFu is an AI Agent. The CLI (`kf`) is for humans, but the MCP server (`fe mcp`) is the heartbeat of the system. 
 - **The VFS Abstraction:** Agents MUST NOT interact with the physical disk (`os.File`). All file operations must route through `pkg/vfs`. 
-- **Splice over Overwrite:** MCP tools must be built to use `vfs.Splice()`. Full file overwrites (`WriteFile`) are considered legacy compatibility fallbacks and should be avoided in agent prompts to preserve granular CRDT history.
+- **Surgical Semantic Edits:** MCP tools must be built to use `vfs.Splice()`. Full file overwrites (`WriteFile`) are considered legacy compatibility fallbacks and should be avoided in agent prompts to preserve granular CRDT history.
 - **Intent Logging:** Agents must call `vfs.Annotate()` before beginning a sequence of edits to tie the CRDT operations to their reasoning phase.
 
 ### 3. P2P Integrity
