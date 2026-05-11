@@ -38,7 +38,9 @@ pub struct OperationTrace {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum OpType {
     Splice { offset: usize, delete_len: usize, insert: String },
+    /// Replaces the entire binary payload (Last-Write-Wins)
+    WriteBinary { payload: Vec<u8> },
     Move { new_parent: String },
-    Create { kind: String }, // "file" or "dir"
+    Create { kind: String }, // "file", "binary", or "dir"
     Delete,
 }

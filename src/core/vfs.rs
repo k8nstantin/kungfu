@@ -26,6 +26,14 @@ impl<'a> VirtualFileSystem<'a> {
                     .map_err(|e| anyhow::anyhow!("CRDT Splice failed: {:?}", e))?;
                 tid
             }
+
+            OpType::WriteBinary { payload } => {
+                let tid = target_id.context("Target TreeID required for WriteBinary")?;
+                let bin_id = format!("bin_{}", tid.to_string());
+                let map = self.doc.get_map(bin_id.as_str());
+                map.insert("data", payload.clone()).map_err(|e| anyhow::anyhow!("CRDT Binary Write failed: {:?}", e))?;
+                tid
+            }
             OpType::Move { new_parent } => {
                 let tid = target_id.context("Target TreeID required for Move")?;
                 let parent_tree_id = if new_parent.is_empty() {
@@ -106,6 +114,22 @@ impl<'a> VirtualFileSystem<'a> {
 
             if kind == "dir" {
                 fs::create_dir_all(&full_path)?;
+            } else if kind == "binary" {
+                if let Some(parent) = full_path.parent() {
+                    fs::create_dir_all(parent)?;
+                }
+                let bin_id = format!("bin_{}", node_id.to_string());
+                let map = self.doc.get_map(bin_id.as_str());
+                if let Some(val) = map.get("data") {
+                    if let Ok(bytes) = val.into_value() {
+                        if let Some(b) = bytes.as_binary() {
+                            fs::write(full_path, b.as_slice())?;
+                        }
+                    }
+                } else {
+                    // Create empty file if no data written yet
+                    fs::write(full_path, &[])?;
+                }
             } else {
                 if let Some(parent) = full_path.parent() {
                     fs::create_dir_all(parent)?;
