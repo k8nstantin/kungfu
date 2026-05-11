@@ -51,6 +51,7 @@ impl Default for KungFuConfig {
 }
 
 impl KungFuConfig {
+    #[allow(dead_code)]
     pub fn load_or_default(dir: &Path) -> Result<Self> {
         let path = dir.join("config.yaml");
         if path.exists() {

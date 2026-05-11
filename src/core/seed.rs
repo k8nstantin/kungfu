@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 use crate::core::identity::Identity;
-use ed25519_dalek::{Signer, Signature};
-use anyhow::Result;
+use ed25519_dalek::Signer;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Seed {

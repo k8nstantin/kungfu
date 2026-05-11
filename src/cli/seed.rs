@@ -3,7 +3,6 @@ use crate::core::dojo::Dojo;
 use crate::core::identity::Identity;
 use crate::core::seed::Seed;
 use std::fs;
-use std::path::PathBuf;
 
 pub fn run(version: String) -> Result<()> {
     let current_dir = std::env::current_dir().context("Failed to get current directory")?;

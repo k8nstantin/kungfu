@@ -20,7 +20,7 @@ impl<'a> VirtualFileSystem<'a> {
         let actual_target_id = match &op {
             OpType::Splice { offset, delete_len, insert } => {
                 let tid = target_id.context("Target TreeID required for Splice")?;
-                let text_id = format!("file_{}", tid.to_string());
+                let text_id = format!("file_{}", tid);
                 let text = self.doc.get_text(text_id.as_str());
                 text.splice(*offset, *delete_len, insert)
                     .map_err(|e| anyhow::anyhow!("CRDT Splice failed: {:?}", e))?;
@@ -29,7 +29,7 @@ impl<'a> VirtualFileSystem<'a> {
 
             OpType::WriteBinary { payload } => {
                 let tid = target_id.context("Target TreeID required for WriteBinary")?;
-                let bin_id = format!("bin_{}", tid.to_string());
+                let bin_id = format!("bin_{}", tid);
                 let map = self.doc.get_map(bin_id.as_str());
                 map.insert("data", payload.clone()).map_err(|e| anyhow::anyhow!("CRDT Binary Write failed: {:?}", e))?;
                 tid
@@ -48,7 +48,7 @@ impl<'a> VirtualFileSystem<'a> {
             OpType::Create { kind } => {
                 // In KungFu, 'kind' carries the metadata: "name:kind" e.g. "main.go:file"
                 let parts: Vec<&str> = kind.split(':').collect();
-                let name = parts.get(0).unwrap_or(&"unnamed");
+                let name = parts.first().unwrap_or(&"unnamed");
                 let file_type = parts.get(1).unwrap_or(&"file");
 
                 let node_id = self.tree.create(target_id)
@@ -82,7 +82,7 @@ impl<'a> VirtualFileSystem<'a> {
     }
 
     pub fn read_by_id(&self, target_id: TreeID) -> String {
-        let text_id = format!("file_{}", target_id.to_string());
+        let text_id = format!("file_{}", target_id);
         let text = self.doc.get_text(text_id.as_str());
         text.to_string()
     }
@@ -138,23 +138,22 @@ impl<'a> VirtualFileSystem<'a> {
                 if let Some(parent) = full_path.parent() {
                     fs::create_dir_all(parent)?;
                 }
-                let bin_id = format!("bin_{}", node_id.to_string());
+                let bin_id = format!("bin_{}", node_id);
                 let map = self.doc.get_map(bin_id.as_str());
                 if let Some(val) = map.get("data") {
-                    if let Ok(bytes) = val.into_value() {
-                        if let Some(b) = bytes.as_binary() {
+                    if let Ok(bytes) = val.into_value()
+                        && let Some(b) = bytes.as_binary() {
                             fs::write(full_path, b.as_slice())?;
                         }
-                    }
                 } else {
                     // Create empty file if no data written yet
-                    fs::write(full_path, &[])?;
+                    fs::write(full_path, [])?;
                 }
             } else {
                 if let Some(parent) = full_path.parent() {
                     fs::create_dir_all(parent)?;
                 }
-                let text_id = format!("file_{}", node_id.to_string());
+                let text_id = format!("file_{}", node_id);
                 let text = self.doc.get_text(text_id.as_str());
                 fs::write(full_path, text.to_string())?;
             }

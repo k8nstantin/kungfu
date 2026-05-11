@@ -61,7 +61,7 @@ async fn main() -> Result<()> {
             println!("Dojo is quiet. No active flows.");
         }
         Commands::Osmose { url } => {
-            sync::osmosis::begin_osmosis(&url).await?;
+            sync::osmosis::begin_osmosis(url).await?;
         }
     }
 

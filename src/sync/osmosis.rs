@@ -27,7 +27,7 @@ pub async fn begin_osmosis(url: &str) -> Result<()> {
     let kf_dir = std::env::current_dir()?.join(".kungfu");
     
     // 1. Load Local State
-    let mut dojo = Dojo::load(&kf_dir.join("snapshot.loro"))?;
+    let dojo = Dojo::load(&kf_dir.join("snapshot.loro"))?;
     let identity = Identity::load(&kf_dir.join("identity.key"))?;
     let vv = dojo.version_vector();
 
@@ -52,8 +52,8 @@ pub async fn begin_osmosis(url: &str) -> Result<()> {
     // one listening to local CRDT events to push, and one listening to the socket to pull.
     while let Some(msg) = read.next().await {
         let msg = msg?;
-        if let Message::Binary(bytes) = msg {
-            if let Ok(update) = bincode::serde::decode_from_slice::<OsmosisUpdate, _>(&bytes, bincode::config::standard()).map(|(u, _)| u) {
+        if let Message::Binary(bytes) = msg
+            && let Ok(update) = bincode::serde::decode_from_slice::<OsmosisUpdate, _>(&bytes, bincode::config::standard()).map(|(u, _)| u) {
                 // TODO: Cryptographically verify the signature
                 println!("Received Osmosis update from: {}", update.pubkey);
                 
@@ -66,7 +66,6 @@ pub async fn begin_osmosis(url: &str) -> Result<()> {
                     let _ = dojo.save(&kf_dir.join("snapshot.loro"));
                 }
             }
-        }
     }
 
     Ok(())

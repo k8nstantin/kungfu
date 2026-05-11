@@ -1,10 +1,10 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 /// Intent represents the "Why" behind a sequence of operations.
 /// In KungFu, there is only one Trunk. When an agent or human mutates the Trunk,
 /// their operations are logically tagged with an Intent.
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct Intent {
     pub id: String,          // UUIDv7
     pub author_pubkey: String, // Ed25519 Public Key Hex
@@ -14,6 +14,7 @@ pub struct Intent {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[allow(dead_code)]
 pub enum IntentStatus {
     /// The mutation is active and streaming operations. (Unselected)
     Mutating,
