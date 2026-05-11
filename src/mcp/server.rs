@@ -76,6 +76,24 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                             }
                         },
                         {
+                            "name": "kungfu_list",
+                            "description": "List all files and directories in the CRDT DNA.",
+                            "inputSchema": { "type": "object", "properties": {} }
+                        },
+                        {
+                            "name": "kungfu_patch",
+                            "description": "Surgically edit a file by finding a specific block of code and replacing it. More robust than counting offsets.",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "path": { "type": "string" },
+                                    "find": { "type": "string" },
+                                    "replace": { "type": "string" }
+                                },
+                                "required": ["path", "find", "replace"]
+                            }
+                        },
+                        {
                             "name": "kungfu_splice",
                             "description": "Surgically edit the CRDT codebase.",
                             "inputSchema": {
@@ -98,6 +116,51 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                 && let Ok(call) = serde_json::from_value::<CallParams>(params_val) {
                     println!("Waiting for lock..."); let dojo = state.dojo.lock().await; println!("Lock acquired.");
                     let vfs = VirtualFileSystem::new(&dojo.doc);
+
+                    if call.name == "kungfu_list" {
+                        match vfs.list_nodes() {
+                            Ok(nodes) => {
+                                let mut text = String::from("Files in DNA:\n");
+                                for (p, kind) in nodes {
+                                    text.push_str(&format!("- {} [{}]\n", p, kind));
+                                }
+                                return Json(json!({ "jsonrpc": "2.0", "id": req.id, "result": { "content": [{ "type": "text", "text": text }] } }));
+                            }
+                            Err(e) => {
+                                return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } }));
+                            }
+                        }
+                    }
+
+                    if call.name == "kungfu_patch" {
+                        if let Some(args) = call.arguments {
+                            let path = args.get("path").and_then(|v| v.as_str()).unwrap_or("");
+                            let find = args.get("find").and_then(|v| v.as_str()).unwrap_or("");
+                            let replace = args.get("replace").and_then(|v| v.as_str()).unwrap_or("");
+
+                            match vfs.find_by_path(path) {
+                                Ok(tid) => {
+                                    match vfs.patch("active_intent", tid, find, replace) {
+                                        Ok(trace) => {
+                                            let trace_id = trace.id.clone();
+                                            drop(dojo);
+                                            let log_path = state.workspace_dir.join(".kungfu/ops.log");
+                                            tokio::spawn(async move {
+                                                use tokio::io::AsyncWriteExt;
+                                                if let Ok(mut file) = tokio::fs::OpenOptions::new().append(true).open(log_path).await {
+                                                    let trace_bytes = bincode::serde::encode_to_vec(&trace, bincode::config::standard()).unwrap_or_default();
+                                                    let _ = file.write_all(&trace_bytes).await;
+                                                }
+                                            });
+                                            return Json(json!({ "jsonrpc": "2.0", "id": req.id, "result": { "content": [{ "type": "text", "text": format!("Patched successfully at trace {}", trace_id) }] } }));
+                                        }
+                                        Err(e) => { return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } })); }
+                                    }
+                                }
+                                Err(e) => { return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } })); }
+                            }
+                        }
+                    }
 
                     if call.name == "kungfu_read" {
                         let path = call.arguments.as_ref().and_then(|a| a.get("path")).and_then(|v| v.as_str()).unwrap_or("");
@@ -176,6 +239,7 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                             let op = OpType::Create { kind: format!("{}:{}", path, kind) };
                             match vfs.express("active_intent", None, op) {
                                 Ok(trace) => {
+                                    let trace_id = trace.id.clone();
                                     let trace_bytes = bincode::serde::encode_to_vec(&trace, bincode::config::standard()).unwrap_or_default();
                                     drop(dojo);
                                     
@@ -189,7 +253,7 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
 
                                     return Json(json!({
                                         "jsonrpc": "2.0", "id": req.id,
-                                        "result": { "content": [{ "type": "text", "text": format!("Created {} at trace {}", path, trace.id) }] }
+                                        "result": { "content": [{ "type": "text", "text": format!("Created {} at trace {}", path, trace_id) }] }
                                     }));
                                 }
                                 Err(e) => {

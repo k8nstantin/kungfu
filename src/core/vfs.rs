@@ -183,4 +183,31 @@ impl<'a> VirtualFileSystem<'a> {
         }
         Ok(path)
     }
+
+    pub fn list_nodes(&self) -> Result<Vec<(String, String)>> {
+        let nodes = self.tree.get_nodes(false);
+        let mut out = Vec::new();
+        for node in nodes {
+            let path = self.resolve_path(node.id)?;
+            let meta = self.tree.get_meta(node.id).map_err(|e| anyhow::anyhow!("Failed to get meta: {:?}", e))?;
+            let kind = meta.get("kind").and_then(|v| v.into_value().ok()).and_then(|v| v.as_string().map(|s| s.to_string())).unwrap_or_else(|| "file".to_string());
+            out.push((path.to_string_lossy().to_string(), kind));
+        }
+        Ok(out)
+    }
+
+    pub fn patch(&self, intent_id: &str, target_id: TreeID, find: &str, replace: &str) -> Result<OperationTrace> {
+        let current_content = self.read_by_id(target_id);
+        if let Some(offset) = current_content.find(find) {
+            let op = OpType::Splice {
+                offset,
+                delete_len: find.len(),
+                insert: replace.to_string(),
+            };
+            self.express(intent_id, Some(target_id), op)
+        } else {
+            Err(anyhow::anyhow!("Semantic Patch Failed: Could not find exact search block in file."))
+        }
+    }
+
 }
