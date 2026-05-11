@@ -54,3 +54,11 @@ In Git, work happens in the dark. A developer or agent disappears onto a branch 
 
 - **Spatial Presence (The Radar):** Agents and Humans constantly broadcast their focus via the WebSocket. The UI/CLI displays exactly who is reading or splicing which block of code in real-time. This prevents redundant work and allows actors to avoid 'hot' zones.
 - **The Osmosis Stream (The Live Ticker):** The Dashboard visualizes the CRDT operation flow not as static files, but as a live ticker of events (e.g., `[10:42] Agent A spliced 14 lines in auth.go`). Humans achieve total God-mode situational awareness of the Swarm's activities.
+
+### Symmetric Visibility (The Code is the Communication Bus)
+Because humans and agents are connected to the exact same continuous CRDT stream, the barrier between "Human Workspace" and "Machine Workspace" is eliminated. 
+
+- **Bi-Directional Presence:** If a human opens `auth.go` in their IDE, their local `kf` client broadcasts their presence. Any agent operating in that file is instantly notified via the MCP server: *"Human operator has entered the file."*
+- **Real-Time Intervention:** A human can type a comment directly into the code (e.g., `// Agent Alpha, pause the JWT validation, I am modifying the struct`). The agent receives this CRDT text splice instantly, processes the context, and adapts. 
+- **The End of Chat Windows:** You do not need a detached Slack channel or terminal prompt to talk to the swarm. You communicate natively through the spatial geometry of the codebase. You are a peer programmer swimming in the exact same stream.
+
