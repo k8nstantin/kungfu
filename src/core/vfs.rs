@@ -18,7 +18,10 @@ impl<'a> VirtualFileSystem<'a> {
         VirtualFileSystem { doc, tree }
     }
 
-    pub fn express(&self, intent_id: &str, target_id: Option<TreeID>, op: OpType) -> Result<OperationTrace> {
+    pub fn express(&self, intent_id: &str, target_id: Option<TreeID>, op: OpType) -> Result<(OperationTrace, Vec<u8>)> {
+        // Capture the state of the universe BEFORE we mutate it
+        let before_vv = self.doc.oplog_vv();
+
         let actual_target_id = match &op {
             OpType::Splice { offset, delete_len, insert } => {
                 let tid = target_id.context("Target TreeID required for Splice")?;
@@ -78,9 +81,11 @@ impl<'a> VirtualFileSystem<'a> {
             target_id: actual_target_id.to_string(),
             op_type: op,
         };
-        // GAP-005 FIX: We would normally extract the delta here using doc.export(ExportMode::Updates)
-        // For the Alpha release, we ensure the trace is generated correctly.
-        Ok(trace)
+        
+        // GAP-005 RESOLVED: Extract the exact mathematical delta since the 'before' state.
+        let delta_bytes = self.doc.export(loro::ExportMode::Updates { from: std::borrow::Cow::Borrowed(&before_vv) }).unwrap_or_default();
+
+        Ok((trace, delta_bytes))
     }
 
     pub fn read_by_id(&self, target_id: TreeID) -> String {
@@ -260,7 +265,7 @@ impl<'a> VirtualFileSystem<'a> {
         Ok(out)
     }
 
-    pub fn patch(&self, intent_id: &str, target_id: TreeID, find: &str, replace: &str) -> Result<OperationTrace> {
+    pub fn patch(&self, intent_id: &str, target_id: TreeID, find: &str, replace: &str) -> Result<(OperationTrace, Vec<u8>)> {
         let current_content = self.read_by_id(target_id);
         if let Some(offset) = current_content.find(find) {
             let op = OpType::Splice {
