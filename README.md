@@ -146,9 +146,10 @@ Git was designed for a world of slow, human-to-human patch-mailing. KungFu is de
 2. [Why We Built It in Rust](#-the-engine-why-rust)
 3. [The CRDT Magic (Loro)](#-the-crdt-magic-loro)
 4. [The Surgical VFS](#-the-surgical-vfs)
-5. [The Evolutionary Loop](#-the-evolutionary-loop-how-it-works)
-6. [How Do We Test Without Branches?](#-faq-how-do-we-test-without-branches)
-7. [Getting Started](#-getting-started)
+5. [The Central Dojo: Stateless Speed & Iceberg Eternity](#-the-central-dojo-stateless-speed--iceberg-eternity)
+6. [The Evolutionary Loop](#-the-evolutionary-loop-how-it-works)
+7. [How Do We Test Without Branches?](#-faq-how-do-we-test-without-branches)
+8. [Getting Started](#-getting-started)
 
 ---
 
@@ -201,6 +202,26 @@ When an agent connects to the KungFu MCP Server and says *"I want to edit main.g
 The agent thinks it's hacking in a bash terminal. In reality, it is streaming pure math into a conflict-free DNA sequence. 
 
 ---
+
+
+
+---
+
+## 🏛 The Central Dojo: Stateless Speed & Iceberg Eternity
+
+KungFu completely redefines the infrastructure of version control. We eliminate DevOps hell by splitting the architecture into a **Stateless Router** and an **Analytical Backbone**.
+
+**1. The Disposable Server (SurrealDB Hot Buffer)**
+The Central Server is a single, stateless Rust binary. It uses **SurrealDB** purely as an in-memory (or RocksDB) transit buffer. It receives binary CRDT updates from agents and uses SurrealDB *Live Queries* to broadcast them to the swarm instantly.
+*If the server crashes, nothing is lost.* The local agents detect the missing Version Vector upon reconnect and mathematically heal the server state via CRDT gossip.
+
+**2. The Iceberg Backbone (The Full Ledger)**
+The absolute Source of Truth is not a git packfile; it is an **Apache Iceberg** table. 
+A parameterized background task continuously micro-batches the CRDT operations from the SurrealDB hot-buffer into immutable Parquet files on S3/GCS.
+*   **True Time Travel:** Run standard SQL (`SELECT * FROM kungfu_ops AS OF '2026-05-10 12:00:00'`) to view the exact codebase state at any millisecond.
+*   **Infinite Analytics:** Plug Iceberg directly into Snowflake or BigQuery to run analytics on your engineering team's cognitive process.
+
+This architecture means **Agents never wait on the network to type code**, and the central server scales infinitely for pennies.
 
 ## 🧬 The Evolutionary Loop (How it works)
 
