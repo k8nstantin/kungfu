@@ -1,3 +1,7 @@
+// Copyright (c) 2026 Constantin Alexander. All rights reserved.
+// Use of this source code is governed by the Apache License 2.0 that can be
+// found in the LICENSE file.
+
 use serde::{Deserialize, Serialize};
 use crate::core::identity::Identity;
 use ed25519_dalek::Signer;
