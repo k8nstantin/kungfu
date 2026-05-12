@@ -1,3 +1,7 @@
+// Copyright (c) 2026 Constantin Alexander. All rights reserved.
+// Use of this source code is governed by the Apache License 2.0 that can be
+// found in the LICENSE file.
+
 use ed25519_dalek::{SigningKey, VerifyingKey};
 use anyhow::{Context, Result};
 use std::fs;
