@@ -21,12 +21,3 @@ Most modern infra spends a fortune on cloud databases trying to keep state in sy
 ## 5. Computing at the Edge of Intelligence
 Agents don't work in batches; they operate continuously at millisecond speeds. Forcing an agent into a human-first snapshot paradigm (Git) is like putting a horse engine in a Tesla. 
 **The Pivot:** KungFu is the native interface for machines. It is surgical, high-frequency, and mathematically convergent.
-
----
-*This archive is a living record of the project's soul.*
-
----
-### 🛠 From Philosophy to Execution
-- **Architecture:** See how these ideas are codified in the **[DESIGN.md](./DESIGN.md)**.
-- **Execution:** Check the current technical debt and roadmap in **[GAP_ANALYSIS.md](./GAP_ANALYSIS.md)**.
-- **Standards:** Review our engineering mandates in **[GEMINI.md](./GEMINI.md)**.
