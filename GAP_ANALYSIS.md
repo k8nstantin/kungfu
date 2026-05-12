@@ -16,3 +16,23 @@ This document tracks identified architectural blind spots, unimplemented critica
 - **GAP-002:** VFS Metadata Tracking (UUIDv7 Names) - ✅ CLOSED
 - **GAP-003:** Write-Ahead Log (WAL) Append - ✅ CLOSED
 - **GAP-004:** Non-blocking Disk I/O (Async Mutex) - ✅ CLOSED
+
+### GAP-006: Mirror Mode (Asynchronous Git Parity)
+*   **Status:** 🔴 OPEN
+*   **The Flaw:** We lack a safety net for human developers. If KungFu corrupts its internal state, work is lost.
+*   **The Fix:** Implement an optional `--mirror-git` flag. Every `kf intent` or `kf expose` should automatically trigger a Git commit on the physical disk to provide a fallback audit trail.
+
+### GAP-007: The "Ingestion" Problem
+*   **Status:** 🔴 OPEN
+*   **The Flaw:** We cannot easily move existing projects into KungFu.
+*   **The Fix:** Implement `kf ingest [path]`. This tool must recursively read a physical directory and initialize the Loro `MovableTree` and `Text` objects.
+
+### GAP-008: Mathematical vs. Syntactic Consistency
+*   **Status:** 🔴 OPEN
+*   **The Flaw:** CRDTs guarantee mathematical convergence but not valid code structure. Concurrent edits might result in un-compilable code.
+*   **The Fix:** Implement "AST-Aware Selection." The `kf expose` phase must include a syntax check (via tree-sitter or native compilers) to ensure the mutation is valid.
+
+### GAP-009: Large File / Junk Support (`.kfignore`)
+*   **Status:** 🔴 OPEN
+*   **The Flaw:** Splicing large binaries or junk files (node_modules) into the DNA will bloat the CRDT and choke the network.
+*   **The Fix:** Implement a `.kfignore` mechanism to explicitly exclude paths from entering the Loro document.
