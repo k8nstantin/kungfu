@@ -39,6 +39,16 @@ Agents interact with a **Surgical VFS** that translates standard file operations
 ## 5. Storage & Persistence
 
 ### Two-Tier Server Storage (Hybrid Ledger)
+
+### The Disposable Server & Self-Healing Sync
+KungFu eliminates DevOps complexity by treating the Central Dojo as a **Disposable Relay**. You do not need to deploy a highly-available, multi-region database cluster.
+
+1. **Embedded Buffer:** The Rust server runs SurrealDB in embedded mode (In-Memory or RocksDB). It is purely a hot transit buffer.
+2. **The Crash Scenario:** If the server container crashes, any operations in the hot buffer that haven't been micro-batched to Iceberg are destroyed.
+3. **CRDT Gossip Recovery:** This is not a data loss event; it is a minor hiccup. When the server reboots, it loads the last known Version Vector from Iceberg. When agents reconnect, they perform a vector handshake. The server mathematically detects the gap, and the agents' local `kf` clients automatically re-transmit the missing operations.
+
+By pushing the responsibility of state to the edges of the network (the agents) and the cold storage (Iceberg), the server requires zero database administration.
+
 - **Hot (Real-time Buffer):** **SurrealDB** acts as the persistent high-speed buffer. Agents stream Loro binary deltas into SurrealDB, which utilizes Live Queries for sub-millisecond P2P broadcast.
 - **Cold (Analytical Ledger):** **Apache Iceberg** (backed by S3/GCS) acts as the absolute Source of Truth and chronological history.
 - **Micro-Batching:** A parameterized background process continuously drains SurrealDB and writes immutable Parquet files to the Iceberg table, enabling native time-travel and deep auditability.
