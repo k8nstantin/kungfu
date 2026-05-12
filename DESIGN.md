@@ -33,15 +33,15 @@ Agents interact with a **Surgical VFS** that translates standard file operations
 
 ### The Sync Hierarchy
 1. **Local Dojo:** Maintains the in-memory Loro document and exposes the MCP server.
-2. **Central Dojo:** A high-speed **Blob Relay** that sequences and broadcasts operations.
-3. **History Engine:** Visualizes the **Intent Timeline** for human review and replay.
+2. **Central Dojo:** A high-speed **Hybrid Ledger**. It sequences operations via **SurrealDB** and archives the DNA sequence into **Apache Iceberg**.
+3. **History Engine:** Visualizes the **Intent Timeline** using the Iceberg chronological record for replay and auditing.
 
 ## 5. Storage & Persistence
 
-### Two-Tier Server Storage (Cloud-Agnostic)
-- **Hot (Transactional):** Append-Only Log (WAL) on fast disk for instant agent writes.
-- **Cold (Durable):** GCS/S3 buckets holding immutable Loro snapshots.
-- **Policy:** Configurable (Temporal, Event-Driven, or Threshold-based).
+### Two-Tier Server Storage (Hybrid Ledger)
+- **Hot (Real-time Buffer):** **SurrealDB** acts as the persistent high-speed buffer. Agents stream Loro binary deltas into SurrealDB, which utilizes Live Queries for sub-millisecond P2P broadcast.
+- **Cold (Analytical Ledger):** **Apache Iceberg** (backed by S3/GCS) acts as the absolute Source of Truth and chronological history.
+- **Micro-Batching:** A parameterized background process continuously drains SurrealDB and writes immutable Parquet files to the Iceberg table, enabling native time-travel and deep auditability.
 
 ### Local Persistence
 - **WAL (Write-Ahead Log):** Operations are saved instantly to `.kungfu/ops.log`.

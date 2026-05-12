@@ -36,3 +36,8 @@ This document tracks identified architectural blind spots, unimplemented critica
 *   **Status:** 🔴 OPEN
 *   **The Flaw:** Splicing large binaries or junk files (node_modules) into the DNA will bloat the CRDT and choke the network.
 *   **The Fix:** Implement a `.kfignore` mechanism to explicitly exclude paths from entering the Loro document.
+
+### GAP-010: Hybrid Ledger Implementation (SurrealDB + Iceberg)
+*   **Status:** 🔴 OPEN
+*   **The Flaw:** We lack the server-side infrastructure to buffer and archive the DNA stream.
+*   **The Fix:** Implement the Central Dojo server using SurrealDB for real-time Live Query broadcasting and Apache Iceberg for long-term Parquet-based operational storage.
