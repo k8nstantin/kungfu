@@ -24,3 +24,9 @@ Agents don't work in batches; they operate continuously at millisecond speeds. F
 
 ---
 *This archive is a living record of the project's soul.*
+
+---
+### 🛠 From Philosophy to Execution
+- **Architecture:** See how these ideas are codified in the **[DESIGN.md](./DESIGN.md)**.
+- **Execution:** Check the current technical debt and roadmap in **[GAP_ANALYSIS.md](./GAP_ANALYSIS.md)**.
+- **Standards:** Review our engineering mandates in **[GEMINI.md](./GEMINI.md)**.

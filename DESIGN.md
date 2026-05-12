@@ -3,6 +3,7 @@
 This document outlines the logical architecture of KungFu (kf), a next-generation version control system designed exclusively for the Agentic Era.
 
 ## 1. The Core Philosophy
+*For the high-level vision and "Why" behind these choices, see the **[Brainstorming Archive](./BRAINSTORMING.md)**.*
 - **Agent-First**: Git is snapshot-based and human-first. KungFu is operation-based and agent-first.
 - **Flow over Snapshot**: Versioning is ambient. Every edit is a first-class CRDT operation that streams in real-time. 
 - **Trunk-Only (No Branches)**: There are no divergent branches. Everything happens in the DNA. Mutations are ephemeral filters, not side-tracks.

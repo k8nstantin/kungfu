@@ -321,7 +321,7 @@ KungFu is in active development. Here is what is coming next in the Dojo:
 
 > *"Everyone is welcome, of course. A single human idea is worth millions of lines of tokenized text, and learning is the best reward."*
 
-We are building KungFu in the open because the Agentic Era needs a universal, decentralized foundation. Check our **[GAP_ANALYSIS.md](./GAP_ANALYSIS.md)** to see the current roadmap and where we need help.
+We are building KungFu in the open because the Agentic Era needs a universal, decentralized foundation. Explore the **[BRAINSTORMING.md](./BRAINSTORMING.md)** to understand the soul of the project, and check our **[GAP_ANALYSIS.md](./GAP_ANALYSIS.md)** to see the current roadmap and where we need help.
 
 Ready to contribute? Read the **[CONTRIBUTING.md](./CONTRIBUTING.md)** and join the Dojo.
 
