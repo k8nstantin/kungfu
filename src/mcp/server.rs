@@ -142,13 +142,13 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                                 Ok(tid) => {
                                     match vfs.patch("active_intent", tid, find, replace) {
                                         Ok(trace) => {
-                                            let trace_id = trace.id.clone();
+                                            let trace_id = trace.0.id.clone();
                                             drop(dojo);
                                             let log_path = state.workspace_dir.join(".kungfu/ops.log");
                                             tokio::spawn(async move {
                                                 use tokio::io::AsyncWriteExt;
                                                 if let Ok(mut file) = tokio::fs::OpenOptions::new().append(true).open(log_path).await {
-                                                    let trace_bytes = bincode::serde::encode_to_vec(&trace, bincode::config::standard()).unwrap_or_default();
+                                                    let trace_bytes = bincode::serde::encode_to_vec(&trace.0, bincode::config::standard()).unwrap_or_default();
                                                     let _ = file.write_all(&trace_bytes).await;
                                                 }
                                             });
@@ -209,7 +209,7 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                                     let op = OpType::Move { new_parent: new_parent_id };
                                     match vfs.express("active_intent", Some(tid), op) {
                                         Ok(trace) => {
-                                            let trace_bytes = bincode::serde::encode_to_vec(&trace, bincode::config::standard()).unwrap_or_default();
+                                            let trace_bytes = bincode::serde::encode_to_vec(&trace.0, bincode::config::standard()).unwrap_or_default();
                                             drop(dojo);
                                             let log_path = state.workspace_dir.join(".kungfu/ops.log");
                                             tokio::spawn(async move {
@@ -218,7 +218,7 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                                                     let _ = file.write_all(&trace_bytes).await;
                                                 }
                                             });
-                                            return Json(json!({ "jsonrpc": "2.0", "id": req.id, "result": { "content": [{ "type": "text", "text": format!("Moved to {} at trace {}", new_name, trace.id) }] } }));
+                                            return Json(json!({ "jsonrpc": "2.0", "id": req.id, "result": { "content": [{ "type": "text", "text": format!("Moved to {} at trace {}", new_name, trace.0.id) }] } }));
                                         }
                                         Err(e) => { return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } })); }
                                     }
@@ -239,8 +239,8 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                             let op = OpType::Create { kind: format!("{}:{}", path, kind) };
                             match vfs.express("active_intent", None, op) {
                                 Ok(trace) => {
-                                    let trace_id = trace.id.clone();
-                                    let trace_bytes = bincode::serde::encode_to_vec(&trace, bincode::config::standard()).unwrap_or_default();
+                                    let trace_id = trace.0.id.clone();
+                                    let trace_bytes = bincode::serde::encode_to_vec(&trace.0, bincode::config::standard()).unwrap_or_default();
                                     drop(dojo);
                                     
                                     let log_path = state.workspace_dir.join(".kungfu/ops.log");
@@ -275,7 +275,7 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                                     match vfs.express("active_intent", Some(tid), op) {
                                         Ok(trace) => {
                                             // GAP-003 FIX: Append to the WAL instead of full snapshot
-                                            let trace_bytes = bincode::serde::encode_to_vec(&trace, bincode::config::standard()).unwrap_or_default();
+                                            let trace_bytes = bincode::serde::encode_to_vec(&trace.0, bincode::config::standard()).unwrap_or_default();
                                             drop(dojo); println!("Lock released.");
                                             
                                             let log_path = state.workspace_dir.join(".kungfu/ops.log");
@@ -288,7 +288,7 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
 
                                             return Json(json!({
                                                 "jsonrpc": "2.0", "id": req.id,
-                                                "result": { "content": [{ "type": "text", "text": format!("Committed trace {}", trace.id) }] }
+                                                "result": { "content": [{ "type": "text", "text": format!("Committed trace {}", trace.0.id) }] }
                                             }));
                                         }
                                         Err(e) => {
