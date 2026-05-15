@@ -136,6 +136,20 @@ Because the Logic DAG is the source of truth, "Storage" on disk changes its natu
 *   **Fossilization:** The disk is no longer a place for a live database engine to read and write. It is a place to store a highly-compressed, serialized "Fossil" of the Logic DAG.
 *   **Hydration:** Upon boot, the Hypervisor reads the Fossil, hydrates the DAG into RAM, and begins JIT-compiling the execution stream. 
 
+
+
+## 9. Mutating the Crystal: Append-Only Operations
+In a traditional database, an `UPDATE` overwrites data, destroying history. Modern systems use MVCC (Multi-Version Concurrency Control). The Isomorph database elevates MVCC into the structural topology of the DAG.
+
+### A. Growth (Append-Only)
+The DAG is strictly append-only. When data is updated, the old node is not overwritten. A new node is grafted onto the graph with a newer UUIDv7 timestamp. Because the JIT compiler evaluates paths chronologically, it naturally resolves the newest node, leaving the historical path intact for instant time-travel querying.
+
+### B. Death (Tombstoning)
+When data is deleted, it is "Soft Deleted." The Agent appends a Tombstone Node to the target. The Hypervisor reads the Tombstone and instantly terminates that execution branch, effectively blinding the system to the deleted data without removing its physical presence from the ledger.
+
+### C. Reshaping (Aging Out)
+To prevent the RAM-based DAG from growing infinitely, the system relies on **Continuous Reshaping**. A background agent identifies "dead wood" (Tombstoned branches or deeply historical updates no longer required for operational flow). It prunes these branches from the Hot DAG in RAM, but only after they have been securely archived into the Cold Ledger (Apache Iceberg). The Crystal maintains perfect density.
+
 ## 6. Conclusion: The Death of the Programming Language
 This hypothesis leads to an inescapable conclusion: **The concept of a Programming Language will be eliminated entirely.**
 
