@@ -4,7 +4,7 @@
 
 **Git is dead. Long live KungFu.**
 
-**Branches are dead.** Coralling stale branches and attempting repository reconciliation is Sisyphean work—it never ends. We have eliminated it entirely.
+**Branches are dead.** Coralling stale branches, staging files, and attempting repository reconciliation is Sisyphean work. Git robs engineering teams of thousands of hours of productivity—time that should be spent building the product. We have eliminated this administrative tax entirely.
 
 ## 🌊 Visualizing the Evolution: Congestion vs. Flow
 
