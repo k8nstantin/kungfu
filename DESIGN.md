@@ -92,3 +92,20 @@ We explicitly reject the use of complex virtual filesystems (FUSE) or container 
 - **Continuous Projection:** As the agent streams mathematical `Splices` into the VFS, the Rust engine continuously `transcribes` the agent's specific CRDT stance onto this hidden physical disk.
 - **100% Tool Compatibility:** The agent runs standard compilers and test suites inside this directory. Because it is a real filesystem, every linter, LSP, and build tool works flawlessly out of the box.
 - **Human Shielding:** The human developer's primary IDE remains clean and stable. The human only sees the agent's code when it is officially woven into the Main Stream DNA after passing Natural Selection.
+
+
+## 11. Dual-Tier Intelligence (Embedded Gemma)
+
+KungFu is not a passive data store; it is an intelligent engine. By integrating Google's open-weights **Gemma** models directly into the architecture, the VCS gains its own cognitive layer, operating without external API latency or cost.
+
+This intelligence is deployed in a two-tier model, matching our storage architecture:
+
+### 1. Local Edge Intelligence (The Immune System)
+A lightweight Gemma model runs locally alongside the `kf` client, providing zero-latency assistance for the active workspace:
+- **Auto-Intent Generation:** Replaces manual commit messages. Gemma analyzes the CRDT splices and autonomously generates rich, semantic Intent summaries.
+- **Semantic Conflict Resolution:** If Loro perfectly merges two edits but the resulting AST is syntactically invalid (GAP-008), the local Gemma model acts as an immune system, analyzing the broken AST and synthesizing a patch before the code reaches the compiler.
+
+### 2. Central Analytical Intelligence (The Iceberg Oracle)
+A heavier Gemma model runs centrally, connected directly to the **Apache Iceberg Ledger**. As local clients project massive amounts of operational data up to Iceberg, the central model processes it:
+- **Natural Language Analytics:** Humans query the Iceberg data lake using plain English (e.g., *"Which files cause the most rework loops for Agent X?"*). Gemma translates this into complex Iceberg SQL queries.
+- **Swarm Optimization:** Gemma continuously analyzes the historical operation stream, identifying inefficiencies in agent prompting or orchestration, turning the VCS into a continuous feedback loop for product improvement.
