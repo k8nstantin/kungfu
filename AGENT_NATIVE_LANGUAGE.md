@@ -95,5 +95,31 @@ By plugging the execution telemetry from the **Apache Iceberg Ledger** back into
 ### The End of Silos (Global Inlining)
 Humans organize code into files and directories because we can't hold a million lines of code in our heads. Agents do not have this limitation. An ANL allows for **Global Inlining**, where the agent optimizes the entire project as a single, massive, interconnected mathematical object. The boundaries between "Auth Library" and "Database Driver" disappear in the binary, resulting in execution speeds that are physically impossible for human-written code to achieve.
 
+
+## 6. Post-Semantic Observability: Triangulating the Graph
+
+If models think in tokens and mathematical probabilities rather than human semantics, the entire concept of "Debugging" must evolve. You cannot step through lines of code if there are no lines of code.
+
+We transition from **Debugging Syntax** to **Auditing a Trajectory**.
+
+### A. The End of the Stack Trace
+In a semantic-free DAG, an error at an output node is merely a symptom. The actual failure likely occurred deep within the dense logic graph. 
+To locate the problem, humans act as "Mission Controllers," relying on the system to perform **Error Triangulation**:
+*   **Forward-Backward Propagation:** Starting from the failed "sink" node, the system traverses the logic edges in reverse (Impact Analysis).
+*   **Intersection:** By tracing multiple failed outputs backward, the system triangulates the exact intersection point—the faulty mathematical node. The higher the resolution of the DAG, the more precise the triangulation.
+
+### B. Formal Verification as the New Compiler
+Because human semantics are removed, we can subject the agent's logic to strict mathematical proofs.
+*   The agent generates the ANL DAG.
+*   Instead of writing unit tests, the system applies **Formal Verification** (FV). It checks the graph against a set of absolute mathematical properties (e.g., "Node X can never output a null vector").
+*   If the math holds, the code is fundamentally secure.
+
+### C. The Consistency Loop (The De-Hydration)
+When the system triangulates a fault, the human does not read the raw binary. 
+Gemma acts as the "Semantic De-Hydrator." You click the faulty node in the visual representation of the DAG, and Gemma translates that specific mathematical state back into human semantics: *"Error: Node 0xAF1 expected a non-zero tensor from the upstream API boundary."*
+
+You fix the architectural constraint (the "What"), and the agent recompiles the 1s and 0s (the "How").
+
 ---
+
 *This hypothesis defines the final destination of the KungFu project: The transition from the Management of Files to the Orchestration of Pure Intelligence.* It compiles from a structural graph directly into the binary heartbeat of the processor, using Gemma and KungFu as the only interfaces that translate this machine-truth back into human-meaning.
