@@ -88,26 +88,13 @@ Formal verification often proves the part of the code that is already the most r
 
 ### C. The Consistency Loop (The De-Hydration)
 When the system triangulates a fault, the human does not read the raw binary. 
-Gemma acts as the "Semantic De-Hydrator." You click the faulty node in the visual representation of the DAG, and Gemma translates that specific mathematical state back into human semantics: *"Error: Node 0xAF1 expected a non-zero tensor from the upstream API boundary."*
+An overarching LLM acts as the "Semantic De-Hydrator." The human clicks the faulty node in the visual representation of the DAG, and the LLM translates that specific mathematical state back into human semantics: *"Error: Node 0xAF1 expected a non-zero tensor from the upstream API boundary."*
 
-You fix the architectural constraint (the "What"), and the agent recompiles the 1s and 0s (the "How").
-
----
-
-## 6. The KungFu Bridge: Real-Time Decompilation
-This hypothesis reveals why the **KungFu Architecture** is the only version control system capable of surviving the transition to Agent-Native Languages. 
-
-Git relies on `diff3`—a line-by-line text comparison algorithm. If the codebase is a mathematical graph, Git ceases to function entirely.
-
-Because KungFu uses mathematical CRDTs (Conflict-free Replicated Data Types) and is decoupled from physical text files, it handles the ANL seamlessly:
-1. **The Core Engine:** Agents stream pure, hyper-dense ANL graphs directly into the KungFu CRDT. The DNA is not a text file; it is an optimized mathematical ledger.
-2. **The Universal Translator:** When a human opens the KungFu Dashboard to review the code, Gemma acts as a real-time semantic decompiler. It reads the ANL logic from the Iceberg Ledger and instantly *transcribes* it into beautifully formatted, idiomatic Go, Python, or Rust on the human's screen. 
-
-The human reads and writes Go. The agent reads and writes ANL. The VCS (KungFu) translates between the two seamlessly.
+The human fixes the architectural constraint (the "What"), and the agent recompiles the 1s and 0s (the "How").
 
 ---
 
-## 7. Conclusion: The Death of the Programming Language
+## 6. Conclusion: The Death of the Programming Language
 This hypothesis leads to an inescapable conclusion: **The concept of a "Programming Language" will be eliminated entirely.**
 
 Programming languages (Python, Rust, C++) are human communication protocols. They were invented because humans needed a way to talk to machines without writing 1s and 0s. 
@@ -115,4 +102,4 @@ Programming languages (Python, Rust, C++) are human communication protocols. The
 In an Agent-Native paradigm, the agent does not need a language. It needs a **Target**. 
 Whether the target is a CPU, a GPU, an NPU, or a quantum matrix, the agent dynamically generates the raw, unadulterated machine logic required to operate it. There is no intermediate human syntax. There is no "Go" or "Java." There is only the machine, and the agent's mathematical intent mapped perfectly to that machine's physical architecture.
 
-**KungFu** is not just versioning code; it is versioning pure, unadulterated intent, allowing us to safely manage software in a world where the programming language no longer exists.
+We are moving into an era where we manage software by overseeing pure, unadulterated intent, safely operating in a world where the programming language no longer exists.
