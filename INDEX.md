@@ -5,6 +5,7 @@ This is the definitive navigation hub for the KungFu project. Start here to expl
 ## 🧠 The Philosophy (The "Why")
 - **[BRAINSTORMING.md](./BRAINSTORMING.md):** The soul of the project. Captures the high-level realizations, the "Sisyphus" problem with Git, and the death of "Dark Work."
 - **[ANL_THOUGHT_EXPERIMENT.md](./ANL_THOUGHT_EXPERIMENT.md):** The Agent-Native Language Hypothesis. Explores the post-text future of software engineering, the Living DAG, and how KungFu serves as the bridge between human semantics and machine execution.
+- **[THE_EVOLUTION_PRESENTATION.md](./THE_EVOLUTION_PRESENTATION.md):** *The Great Transcription.* A 20-slide visual narrative of the computational arc from syntax to biological quantum consciousness.
 - **[THE_LAST_SEMICOLON.md](./THE_LAST_SEMICOLON.md):** *The Last Semicolon.* A realistic sci-fi chronicle of the evolution of coding, from legacy text snapshots to the Crystalline Era of Information Physics, and the ultimate role of the human Architect.
 
 
