@@ -1,7 +1,7 @@
 # 🥋 KungFu: Architecture of Infinite Engineering
 **The Dawn of the Intelligent VCS**
 **Deep-Dive: Intelligent Version Control, Dual-Tier AI, and Symmetric Visibility**
-*Author: Constantin Alexander*
+*Author: Constantin Alexander* | *Version: 1.0*
 
 ## Executive Summary
 Version control has historically been a record-keeping exercise. In the Agentic Era, it must become a cognitive layer. KungFu re-envisions version control by merging mathematical convergence (Loro Rust CRDTs) with embedded intelligence (Gemma) and industrial-scale analytical ledgers (Apache Iceberg). This document details the tools and architectural tiers that transform the "Dark Work" of Git into the "Universal Symmetric Awareness" of KungFu.
@@ -75,6 +75,16 @@ We utilize **Apache Iceberg** not just as a backup, but as the primary analytica
 *   **Standard SQL Interface:** Because the codebase is stored in a structured, columnar format (Parquet), engineering teams can use standard Data Science tools (Python, Snowflake, BigQuery) to analyze their own development velocity.
 
 ---
+
+
+
+## 5. The Modern Stack: High-Fidelity Infrastructure
+The KungFu architecture is only possible today due to the convergence of several high-fidelity, modern open-source technologies. We are not building heuristics on top of legacy C libraries; we are orchestrating state-of-the-art data structures.
+
+*   **Rust (The Engine):** The entire core is written in Rust. It provides the memory safety required for a multi-threaded MCP server and the blistering zero-cost abstractions necessary to process sub-millisecond CRDT math without blocking disk I/O.
+*   **Loro (The Math):** Loro is a high-performance CRDT library. Unlike older operational transform (OT) algorithms, Loro's implementation of the `Fugue` text algorithm and the `MovableTree` filesystem algorithm guarantees mathematically perfect convergence without tombstone bloat, allowing infinite concurrent agent splices.
+*   **SurrealDB (The Flow):** SurrealDB is a modern, Rust-native operational database. Its native support for `Live Queries` over WebSockets eliminates the need to build a complex pub/sub message broker. It acts as the perfect, high-speed ephemeral buffer for the swarm's raw binary data.
+*   **Apache Iceberg (The Ledger):** Iceberg is the industry standard for open table formats. By leveraging Iceberg instead of raw Parquet files or proprietary Git packfiles, KungFu inherits ACID transactions, schema evolution, and native time-travel, instantly integrating the codebase's history into the broader enterprise data ecosystem (Snowflake, Databricks).
 
 ## Conclusion: Evolving Code over Managing Files
 Git was a filing system for an era where humans typed slowly. **KungFu is an intelligent nervous system** for an era where machines and humans evolve code together at lightspeed. By combining the mathematical purity of CRDTs with the proactive intelligence of Gemma and the analytical power of Iceberg, we have reclaimed the thousands of hours stolen by legacy administration. 
