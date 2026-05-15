@@ -150,6 +150,20 @@ When data is deleted, it is "Soft Deleted." The Agent appends a Tombstone Node t
 ### C. Reshaping (Aging Out)
 To prevent the RAM-based DAG from growing infinitely, the system relies on **Continuous Reshaping**. A background agent identifies "dead wood" (Tombstoned branches or deeply historical updates no longer required for operational flow). It prunes these branches from the Hot DAG in RAM, but only after they have been securely archived into the Cold Ledger (Apache Iceberg). The Crystal maintains perfect density.
 
+
+## 10. The Death of SQL (Semantic Traversal)
+If the database is a pure logic DAG in memory, and the interface is a Semantic De-Hydrator (LLM), structured query languages like SQL become entirely obsolete.
+
+SQL is a human-readable abstraction designed to command a Query Planner to fetch rows from physical disks. In Isomorph, there are no tables to "JOIN"—relationships are already physically realized as mathematical edges in the DAG.
+
+### The Semantic Query Loop
+1.  **The Semantic Ask:** A human provides pure intent: *"Show me all active users who abandoned carts today."*
+2.  **The Traversal Sub-graph:** The Agent does not generate SQL. It JIT-compiles a highly specific, optimized sub-graph of machine instructions designed to traverse the exact edges of the DAG that represent "Active," "Abandoned," and "Today."
+3.  **The JIT Wave:** This temporary sub-graph is grafted onto the main Crystalline program. The CPU executes the direct memory jumps in microseconds and extracts a binary result set.
+4.  **De-Hydration:** The Agent translates the binary results back into human semantics (a text summary or a UI table).
+
+By eliminating SQL, we remove the rigid syntax boundaries of querying. Humans can ask probabilistically complex questions (*"Find the most anomalous transaction"*) that the Agent directly encodes into the structural traversal of the graph. The query language is simply Human Intent.
+
 ## 6. Conclusion: The Death of the Programming Language
 This hypothesis leads to an inescapable conclusion: **The concept of a Programming Language will be eliminated entirely.**
 
