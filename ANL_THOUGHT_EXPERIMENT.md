@@ -94,6 +94,21 @@ The human fixes the architectural constraint (the What), and the agent recompile
 
 
 
+
+## 8. The Physical Substrate: The Computation Block
+If the boundaries between Code, Data, Execution, and Network are eliminated, traditional Von Neumann hardware (Silicon CPUs + RAM) becomes a physical bottleneck. Electrons moving across copper buses cannot support the fluid, instantaneous morphing of a Living DAG.
+
+The ultimate destination of the ANL architecture is the elimination of the "Computer" in favor of the **Computation Block**: a "Crystalline Structure of Logic and Data."
+
+### A. The Material: Photonic Memristors
+Silicon transistors process logic; capacitors hold memory. In an ANL architecture, these are the same entity. The substrate will likely be a 3D matrix of **Memristors** (Memory Resistors) built from complex metal oxides. Memristors perform logic and hold state simultaneously. The Living DAG is the physical resistance pattern across this matrix.
+
+### B. The Execution: Speed of Light
+To achieve "Global Inlining" without a network, the Crystal replaces electrons with **Photonics**. Queries do not execute as electrical clock-cycles; they enter the matrix as pulses of light. The memristors act as optical switches, bending the light through the physical manifestation of the DAG at `c`, outputting the result instantly.
+
+### C. The Form Factor
+There is no CPU socket, no motherboard, and no Operating System. The physical hardware is a sealed, solid-state block of programmable matter. The Agent-Native Language is not "compiled" into bits; it is physically crystallized into the optical and chemical layout of the substrate itself. When the Agent's intent changes, the block literally re-shapes its physical interior to become the perfect machine for the new task. We move from Computer Engineering to **Information Physics**.
+
 ## 7. The Trust Paradox and Isomorph
 
 If agents write pure machine logic (1s and 0s) from a DAG, and humans rely on a second AI (a De-Hydrator) to translate that logic back into English, we create a **Trust Paradox**. We are relying on an AI to honestly audit another AI. This is fundamentally insecure for mission-critical systems.
