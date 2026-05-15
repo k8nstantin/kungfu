@@ -134,6 +134,7 @@ We aren't just "better" than Git. We are the antithesis of Git. KungFu is a fund
 
 - **We reject the Branch Graveyard.** We eliminate two of Git's biggest nightmares: **stale branches** and **repository reconciliation**. In Git, branches lay around rotting for months, becoming impossible to organize and guaranteeing merge conflicts when you finally try to reconcile them. We embrace **Extreme Trunk-Based Evolution**. There is only one timeline. Mutations are ephemeral—they live for hours or less before passing Natural Selection or dying.
 - **We reject Snapshots.** Snapshots are dead history. We embrace **Flow**.
+- **We reject "Dumb" Infrastructure.** Git is completely blind. It does not understand code; it only sees blocks of text. It is dumb on the client and dumb on the server, relying on brittle heuristics to guess how edits fit together. We embrace the **Intelligent VCS**. KungFu embeds Google's open-weights **Gemma** model directly into the architecture. Gemma acts as the "brain" of the VCS, providing semantic conflict resolution on the client and deep Iceberg data-lake analytics on the server.
 - **We reject Manual Merging.** Manual merging is a human tax. We embrace **Mathematical Convergence**.
 - **We reject the Staging Area.** Staging is friction. We embrace **Real-time Streaming**.
 - **We reject the Manual.** Git literally comes with a book. KungFu is intelligent. You shouldn't need a textbook to save your work and collaborate with your team.
