@@ -11,7 +11,7 @@ AI agents (LLMs) do not share these biological constraints. They process multidi
 ---
 
 ## 1. The Design: The Living DAG
-By definition, an Agent-Native Language (ANL) removes the concept of "source code" as a static text file. Instead, software is represented as a **Living Directed Acyclic Graph (DAG)** of pure logic operations.
+By definition, an Agent-Native Language (ANL) removes the concept of "source code" as a static text file. Instead, software is represented as a **Living Directed Acyclic Graph (DAG)** or **DisGraph (Distributed Graph)** of pure logic operations.
 
 ### A. Graph-Based Logic (Pure Structure)
 The codebase is a multidimensional graph of relationships. 
@@ -29,7 +29,7 @@ The physical manifestation of the code (the 1s and 0s) does not exist until the 
 When a request enters the system, the runtime traverses the Living DAG and JIT-compiles (Just-In-Time) the exact machine instructions required for that specific request, on that specific hardware, at that specific microsecond. Once the operation is complete, the instructions are discarded. We bypass human-readable Assembly code entirely.
 
 ### B. Hardware-Agnostic Routing
-Because the ANL is a mathematical DAG of operations rather than a rigid sequence of text, the executor becomes hardware-intelligent. It analyzes the DAG and decides, in real-time, to execute one branch of the logic on a CPU, another on a GPU, and a third on a specialized AI Tensor Core (NPU), without the agent ever needing to understand the underlying physical architecture. 
+Because the ANL is a mathematical DAG of operations rather than a rigid sequence of text, the executor becomes hardware-intelligent. It analyzes the DAG and decides, in real-time, to execute one branch of the logic on a CPU, another on a GPU, and a third on a specialized AI Tensor Core (NPU), without the agent ever needing to understand the underlying physical architecture. We achieve **Absolute Abstraction**.
 
 ### C. Evolutionary Logic (Runtime Morphing)
 Because the code is a Living DAG, it is capable of autonomous evolution while the process is still running. If the system detects that a specific node in the logic graph is causing an L2 cache bottleneck on an ARM chip, the agent mathematically re-weights the graph's edges. The very next request follows a more efficient logic path. The software evolves its own internal organs to survive the environment.
@@ -52,18 +52,39 @@ To ensure a super-intelligent agent does not accidentally (or intentionally) des
 
 ---
 
-## 4. Maintenance: Post-Semantic Observability
+## 4. Maintenance: Post-Semantic Observability and Trajectory Auditing
 If models think in tokens and mathematical probabilities rather than human semantics, the entire concept of "Debugging" must evolve. You cannot step through lines of code if there are no lines of code.
 
 We transition from **Debugging Syntax** to **Auditing a Trajectory**.
 
-### A. The End of the Stack Trace and Error Triangulation
-In a semantic-free DAG, an error at an output node is merely a symptom. The actual failure likely occurred deep within the dense logic graph. To locate the problem, humans act as "Mission Controllers," relying on the system to perform **Error Triangulation**:
-*   **Forward-Backward Propagation:** Starting from the failed "sink" node, the system traverses the logic edges in reverse (Impact Analysis).
-*   **Intersection:** By tracing multiple failed outputs backward, the system triangulates the exact intersection point—the faulty mathematical node.
+### A. The End of the Stack Trace: Error Triangulation
+In a semantic-free DAG, an error at an output node is merely a symptom. The actual failure likely occurred deep within the dense logic graph, cascading through dependencies. To locate the problem, humans act as "Mission Controllers," relying on the system to perform **Error Triangulation**:
+*   **Forward Analysis (Propagation):** Identifies all nodes affected by a specific failure. If Node A fails, every node in its "reachability set" is potentially corrupted.
+*   **Backward Analysis (Root Cause):** Starting from the failed "sink" node, the system traverses the logic edges in reverse to find the "minimal set" of upstream nodes that could have caused the state.
+*   **Dynamic Impact Analysis:** Creating an "execution impact graph" during runtime. By measuring "impact strength" (the sensitivity of a child node to changes in a parent), the system ranks which upstream nodes are most likely the source of the error.
+*   **Graph Cutting (Slicing) & Interval Analysis:** Isolating subgraphs or propagating ranges of possible values to find contradictions in the mathematical constraints.
 
-### B. Formal Verification as the New Compiler
-Because human semantics are removed, we can subject the agent's logic to strict mathematical proofs. Instead of writing unit tests, the system applies **Formal Verification** (FV). It checks the graph against a set of absolute mathematical properties. If the math holds, the code is fundamentally secure.
+### B. High-Resolution Observability Primitives
+To observe agent-native machine code effectively, we must monitor "intent" rather than "execution." The ANL utilizes specific primitives:
+*   **Structured Semantic Traces:** Redacted, normalized versions of reasoning steps that provide interpretability without exposing raw token streams.
+*   **Trajectory Attribution:** Linking every abstract action to a specific agent version and goal, essential for multi-agent swarms.
+*   **Influence Maps:** Visualizing how specific memory entries or past experiences influenced an agent's current mathematical splice.
+*   **Semantic Drift Monitoring:** Detecting when an agent's reasoning path diverges from established "golden paths" via Breadth-First Searches (BFS) on the DisGraph, acting as an early warning system for hallucinations.
+
+---
+
+## 5. Formal Verification vs. Boundary Debugging
+In the ANL paradigm, the division between mathematical proof and runtime observation becomes strict. We apply the **Verification Gap** principle:
+
+### A. Formal Verification (The Core Brain)
+Because human semantics are removed, we can subject the agent's core logic to strict mathematical proofs. Instead of writing unit tests, the system applies **Formal Verification (FV)** (similar to TLA+ or Lean). 
+*   **The "Clover" Paradigm:** The system enforces a closed-loop where the agent generates the DAG, the docstrings, and the formal annotations. A model checker verifies consistency between them. If they don't match, the agent is forced to re-think until the proof passes.
+*   FV is used for state transitions, security permissions, and critical algorithms where a single failure is catastrophic. It proves the *absence* of errors.
+
+### B. Boundary Debugging (The Glue)
+Formal verification often proves the part of the code that is already the most reliable. The bugs hide in the "glue" (e.g., interface mismatches at API boundaries). 
+*   For these boundaries, we use **Traffic Replay** and **Node Shadowing** (running a "known good" version of a node in parallel with the suspect node to compare outputs).
+*   **AI-First Debugging:** A second "critic" agent analyzes the impact graph of the first agent to identify failure patterns at the messy environmental boundaries.
 
 ### C. The Consistency Loop (The De-Hydration)
 When the system triangulates a fault, the human does not read the raw binary. 
@@ -73,7 +94,7 @@ You fix the architectural constraint (the "What"), and the agent recompiles the 
 
 ---
 
-## 5. The KungFu Bridge: Real-Time Decompilation
+## 6. The KungFu Bridge: Real-Time Decompilation
 This hypothesis reveals why the **KungFu Architecture** is the only version control system capable of surviving the transition to Agent-Native Languages. 
 
 Git relies on `diff3`—a line-by-line text comparison algorithm. If the codebase is a mathematical graph, Git ceases to function entirely.
@@ -86,7 +107,7 @@ The human reads and writes Go. The agent reads and writes ANL. The VCS (KungFu) 
 
 ---
 
-## 6. Conclusion: The Death of the Programming Language
+## 7. Conclusion: The Death of the Programming Language
 This hypothesis leads to an inescapable conclusion: **The concept of a "Programming Language" will be eliminated entirely.**
 
 Programming languages (Python, Rust, C++) are human communication protocols. They were invented because humans needed a way to talk to machines without writing 1s and 0s. 
