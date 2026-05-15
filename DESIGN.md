@@ -80,3 +80,15 @@ Because humans and agents are connected to the exact same continuous CRDT stream
 - **Real-Time Intervention:** A human can type a comment directly into the code (e.g., `// Agent Alpha, pause the JWT validation, I am modifying the struct`). The agent receives this CRDT text splice instantly, processes the context, and adapts. 
 - **The End of Chat Windows:** You do not need a detached Slack channel or terminal prompt to talk to the swarm. You communicate natively through the spatial geometry of the codebase. You are a peer programmer swimming in the exact same stream.
 
+
+
+## 10. The Execution Scratchpad (Agent Isolation)
+
+To solve the "Context Paradox"—where agents need to run physical compilers (e.g., `go build`) on code that currently only exists as math in the CRDT—KungFu utilizes a **Zero-Friction Physical Mirror** approach.
+
+We explicitly reject the use of complex virtual filesystems (FUSE) or container runtimes, as they violate our core philosophy of operational simplicity. Developers and agents should focus on coding; KungFu handles the mechanics silently.
+
+- **Isolated Worktrees:** When an agent begins a Mutation, KungFu provisions a hidden directory (e.g., `.kungfu/workspaces/<agent-id>/`).
+- **Continuous Projection:** As the agent streams mathematical `Splices` into the VFS, the Rust engine continuously `transcribes` the agent's specific CRDT stance onto this hidden physical disk.
+- **100% Tool Compatibility:** The agent runs standard compilers and test suites inside this directory. Because it is a real filesystem, every linter, LSP, and build tool works flawlessly out of the box.
+- **Human Shielding:** The human developer's primary IDE remains clean and stable. The human only sees the agent's code when it is officially woven into the Main Stream DNA after passing Natural Selection.
