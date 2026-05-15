@@ -37,7 +37,19 @@ Sitting on the developer's machine, a lightweight Gemma model monitors the live 
 ### Central Tier: The Iceberg Oracle (Cloud Intelligence)
 A heavier Gemma model sits atop the **Apache Iceberg Ledger**, which archives the entire history of the enterprise's code evolution.
 *   **Predictive Analytics:** By analyzing millions of historical CRDT operations, the central Gemma predicts future bottlenecks. It can flag areas of high cognitive collision or regression probability.
-*   **Natural Language Discovery:** Humans no longer search history; they interview it. A manager asks: "Show me the evolution of the auth system." Gemma queries the Iceberg catalog, summarizes the Intent Log, and replays the relevant splices.
+*   **Natural Language Discovery: Interviewing the DNA:** Humans no longer "search" history via regex or commit hashes; they interview it. Because Gemma is connected to the chronologically perfect Iceberg metadata catalog, the codebase becomes a conversational entity.
+    *   *Example Queries:*
+        *   "Who was the first actor to introduce the dependency on the legacy SQL library, and what was their stated Intent?"
+        *   "Show me the three most complex refactors this month that required more than 5 human interventions."
+        *   "Replay the evolution of the 'PaymentGateway' from its initial stub to its current state, highlighting only the security-related splices."
+        *   "Find all instances where an agent ignored a coding standard, and summarize the pattern of failure."
+*   **Industrial-Scale Engineering Intelligence:** The Iceberg backbone provides high-fidelity, live statistics that are physically impossible to extract from Git's static snapshots:
+    *   **Cognitive Collision Rate:** Measure how often different actors (AI or human) attempt to edit the same semantic block, identifying architectural "hotspots" that need decoupling.
+    *   **Mutation Survival Rate:** Track what percentage of agent-generated code survives "Natural Selection" (CI) on the first attempt, providing a direct metric for model/prompt efficiency.
+    *   **Surgical Velocity:** Instead of "Lines of Code," measure the frequency and precision of "Splices." Identify which parts of the codebase are "Fluid" (evolving fast) vs. "Brittle" (requiring constant rework).
+    *   **True Cost of Intent:** Link every sub-second operation back to its semantic Intent, allowing for precise financial attribution of agent spend to specific product features.
+
+This turns the VCS into an **Engineering Operating System**, where management is driven by data, not intuition.
 
 ---
 
