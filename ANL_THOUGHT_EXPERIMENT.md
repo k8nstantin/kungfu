@@ -84,14 +84,14 @@ The human fixes the architectural constraint (the What), and the agent recompile
 
 
 
-## 7. The Trust Paradox and the Isomorphic Language
+## 7. The Trust Paradox and Isomorph
 
 If agents write pure machine logic (1s and 0s) from a DAG, and humans rely on a second AI (a De-Hydrator) to translate that logic back into English, we create a **Trust Paradox**. We are relying on an AI to honestly audit another AI. This is fundamentally insecure for mission-critical systems.
 
 To solve this, we must invent a completely new type of programming language from scratch.
 
-### The Isomorphic Language (IsoLang)
-Instead of a language that favors humans (Python) or a language that favors machines (Raw DAGs), the future requires an **Isomorphic Language**—a language with two perfectly synchronized faces:
+### Isomorph
+Instead of a language that favors humans (Python) or a language that favors machines (Raw DAGs), the future requires **Isomorph**—a language with two perfectly synchronized faces:
 1.  **Semantics for Us:** A high-level, human-readable syntax that resembles a hyper-structured Legal Contract or Formal Blueprint (e.g., `Ensure [Database] encrypts [Data] before [Egress]`).
 2.  **Machine for AI:** These semantic blocks are not "compiled" in a traditional sense. They are 1-to-1 mathematical mappings to the structural nodes in the Agent's DAG.
 
