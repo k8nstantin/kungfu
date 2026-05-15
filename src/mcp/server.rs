@@ -80,30 +80,6 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                             }
                         },
                         {
-                            "name": "kungfu_drop_cursor",
-                            "description": "Drop a spatial cursor in the codebase to communicate intent to other agents. The cursor floats dynamically if code changes around it.",
-                            "inputSchema": {
-                                "type": "object",
-                                "properties": {
-                                    "path": { "type": "string" },
-                                    "find": { "type": "string", "description": "The exact text block you are focusing on." },
-                                    "metadata": { "type": "string", "description": "JSON payload containing your intent or message." }
-                                },
-                                "required": ["path", "find", "metadata"]
-                            }
-                        },
-                        {
-                            "name": "kungfu_read_cursors",
-                            "description": "Read all active cursors in a file to see where other agents are working and what their intents are.",
-                            "inputSchema": {
-                                "type": "object",
-                                "properties": {
-                                    "path": { "type": "string" }
-                                },
-                                "required": ["path"]
-                            }
-                        },
-                        {
                             "name": "kungfu_list",
                             "description": "List all files and directories in the CRDT DNA.",
                             "inputSchema": { "type": "object", "properties": {} }
@@ -145,46 +121,6 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                     println!("Waiting for lock..."); let dojo = state.dojo.lock().await; println!("Lock acquired.");
                     let vfs = VirtualFileSystem::new(&dojo.doc);
 
-                    if call.name == "kungfu_drop_cursor"
-                        && let Some(args) = call.arguments {
-                            let path = args.get("path").and_then(|v| v.as_str()).unwrap_or("");
-                            let find = args.get("find").and_then(|v| v.as_str()).unwrap_or("");
-                            let metadata = args.get("metadata").and_then(|v| v.as_str()).unwrap_or("{}");
-
-                            match vfs.find_by_path(path) {
-                                Ok(tid) => {
-                                    let current_content = vfs.read_by_id(tid);
-                                    if let Some(offset) = current_content.find(find) {
-                                        match vfs.drop_cursor(tid, offset, metadata) {
-                                            Ok(cursor_id) => {
-                                                return Json(json!({ "jsonrpc": "2.0", "id": req.id, "result": { "content": [{ "type": "text", "text": format!("Dropped cursor {}", cursor_id) }] } }));
-                                            }
-                                            Err(e) => { return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } })); }
-                                        }
-                                    } else {
-                                        return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": "Semantic patch failed. Text block not found." } }));
-                                    }
-                                }
-                                Err(e) => { return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } })); }
-                            }
-                        }
-
-                    if call.name == "kungfu_read_cursors"
-                        && let Some(args) = call.arguments {
-                            let path = args.get("path").and_then(|v| v.as_str()).unwrap_or("");
-                            match vfs.find_by_path(path) {
-                                Ok(tid) => {
-                                    match vfs.read_cursors(tid) {
-                                        Ok(cursors) => {
-                                            return Json(json!({ "jsonrpc": "2.0", "id": req.id, "result": { "content": [{ "type": "text", "text": serde_json::to_string_pretty(&cursors).unwrap_or_default() }] } }));
-                                        }
-                                        Err(e) => { return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } })); }
-                                    }
-                                }
-                                Err(e) => { return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } })); }
-                            }
-                        }
-
                     if call.name == "kungfu_list" {
                         match vfs.list_nodes() {
                             Ok(nodes) => {
@@ -200,8 +136,8 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                         }
                     }
 
-                    if call.name == "kungfu_patch"
-                        && let Some(args) = call.arguments {
+                    if call.name == "kungfu_patch" {
+                        if let Some(args) = call.arguments {
                             let path = args.get("path").and_then(|v| v.as_str()).unwrap_or("");
                             let find = args.get("find").and_then(|v| v.as_str()).unwrap_or("");
                             let replace = args.get("replace").and_then(|v| v.as_str()).unwrap_or("");
@@ -228,6 +164,7 @@ async fn handle_rpc(State(state): State<Arc<AppState>>, Json(req): Json<McpReque
                                 Err(e) => { return Json(json!({ "jsonrpc": "2.0", "id": req.id, "error": { "code": -32000, "message": e.to_string() } })); }
                             }
                         }
+                    }
 
                     if call.name == "kungfu_read" {
                         let path = call.arguments.as_ref().and_then(|a| a.get("path")).and_then(|v| v.as_str()).unwrap_or("");
