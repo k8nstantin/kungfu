@@ -6,7 +6,7 @@ This is the definitive navigation hub for the KungFu project. Start here to expl
 - **[BRAINSTORMING.md](./BRAINSTORMING.md):** The soul of the project. Captures the high-level realizations, the "Sisyphus" problem with Git, and the death of "Dark Work."
 
 ## 🏛 The Architecture (The "How")
-- **[WHITEPAPER.md](./WHITEPAPER.md):** The definitive architectural deep-dive. Covers the VFS, Gemma Intelligence, Symmetric Visibility, and the Iceberg Ledger.
+- **[WHITEPAPER.md](./WHITEPAPER.md):** *The Dawn of the Intelligent VCS.* The definitive architectural deep-dive. Covers the VFS, Gemma Intelligence, Symmetric Visibility, and the Iceberg Ledger.
 - **[DESIGN.md](./DESIGN.md):** The formal technical blueprint. Explains the CRDT engine, the VFS, and the Hybrid Ledger (SurrealDB + Iceberg) architecture.
 
 ## 🚀 The Execution (The "What")
