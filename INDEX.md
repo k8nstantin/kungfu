@@ -4,6 +4,7 @@ This is the definitive navigation hub for the KungFu project. Start here to expl
 
 ## 🧠 The Philosophy (The "Why")
 - **[BRAINSTORMING.md](./BRAINSTORMING.md):** The soul of the project. Captures the high-level realizations, the "Sisyphus" problem with Git, and the death of "Dark Work."
+- **[ANL_THOUGHT_EXPERIMENT.md](./ANL_THOUGHT_EXPERIMENT.md):** The Agent-Native Language Hypothesis. Explores the post-text future of software engineering, the Living DAG, and how KungFu serves as the bridge between human semantics and machine execution.
 
 
 ## 🏛 The Architecture (The "How")
