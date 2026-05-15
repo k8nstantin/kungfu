@@ -104,6 +104,7 @@ This intelligence is deployed in a two-tier model, matching our storage architec
 A lightweight Gemma model runs locally alongside the `kf` client, providing zero-latency assistance for the active workspace:
 - **Auto-Intent Generation:** Replaces manual commit messages. Gemma analyzes the CRDT splices and autonomously generates rich, semantic Intent summaries.
 - **Semantic Conflict Resolution:** If Loro perfectly merges two edits but the resulting AST is syntactically invalid (GAP-008), the local Gemma model acts as an immune system, analyzing the broken AST and synthesizing a patch before the code reaches the compiler.
+- **Continuous Security & Predictive Scanning:** Because Gemma understands semantics, it continuously monitors the live CRDT stream. It acts as a real-time security auditor, flagging vulnerabilities the millisecond an agent types them, and predicting future architectural bottlenecks before they are permanently woven into the DNA.
 
 ### 2. Central Analytical Intelligence (The Iceberg Oracle)
 A heavier Gemma model runs centrally, connected directly to the **Apache Iceberg Ledger**. As local clients project massive amounts of operational data up to Iceberg, the central model processes it:
