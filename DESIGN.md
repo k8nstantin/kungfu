@@ -53,8 +53,9 @@ By pushing the responsibility of state to the edges of the network (the agents) 
 - **Cold (Analytical Ledger):** **Apache Iceberg** (backed by S3/GCS) acts as the absolute Source of Truth and chronological history.
 - **Micro-Batching:** A parameterized background process continuously drains SurrealDB and writes immutable Parquet files to the Iceberg table, enabling native time-travel and deep auditability.
 
-### Local Persistence
-- **WAL (Write-Ahead Log):** Operations are saved instantly to `.kungfu/ops.log`.
+### Local Persistence (The Local Fossil Record)
+- **WAL (Write-Ahead Log):** High-frequency operations are saved instantly to `.kungfu/ops.log`.
+- **Fossil Cache (RocksDB):** To enable offline time-travel, the local client maintains a persistent cache of the DNA's chronological history. This ensures that `kf timeline` and `kf checkout @timestamp` work without a network connection.
 - **Materialized View:** The DNA is continuously **Transcribed** to the physical filesystem so legacy tools work unmodified.
 
 

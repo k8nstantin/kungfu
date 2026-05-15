@@ -51,7 +51,7 @@ In Git, branches are Dark Work—invisible until a PR is opened. KungFu eliminat
 ### The Immutable Ledger (Transparency & Trust)
 Every operation in KungFu is **Signed and Sorted**.
 *   **Ed25519 Trust:** No code enters the DNA unless it is signed by a verified cryptographic key. This provides an indisputable audit trail.
-*   **UUIDv7 Chronology:** Because we use time-based UUIDs, we have achieved **Decentralized Time Travel**. The history is not a series of snapshots; it is a perfectly ordered, sub-millisecond sequence of human and machine thoughts.
+*   **Tiered Decentralized Time Travel:** To preserve Git's legendary offline resilience, KungFu utilizes a **Tiered History** model. The local `kf` client maintains a high-performance **RocksDB Fossil Cache** of recent DNA evolution. This allows for sub-millisecond, offline time-travel and rollback. Only deep, multi-year archival queries require a network connection to the central **Apache Iceberg Oracle**, ensuring the developer can work from an airplane without losing visibility into the project's past.
 
 ---
 
