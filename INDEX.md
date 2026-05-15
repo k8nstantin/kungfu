@@ -4,7 +4,7 @@ This is the definitive navigation hub for the KungFu project. Start here to expl
 
 ## 🧠 The Philosophy (The "Why")
 - **[BRAINSTORMING.md](./BRAINSTORMING.md):** The soul of the project. Captures the high-level realizations, the "Sisyphus" problem with Git, and the death of "Dark Work."
-- **[AGENT_NATIVE_LANGUAGE.md](./AGENT_NATIVE_LANGUAGE.md):** A deep-dive thought experiment into the inevitable post-text future of software engineering, and how KungFu will serve as the universal translator between human abstractions and hyper-dense machine logic.
+
 
 ## 🏛 The Architecture (The "How")
 - **[WHITEPAPER.md](./WHITEPAPER.md):** *Architecture of Infinite Engineering.* The Dawn of the Intelligent VCS. Covers the VFS, Gemma Intelligence, Symmetric Visibility, and the Iceberg Ledger.
