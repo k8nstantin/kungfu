@@ -15,7 +15,7 @@ KungFu abandons the 140+ administrative commands of Git. It replaces them with a
 The VFS is the "Brain" of the local client. It decouples **File Identity** from **Filesystem Pathing**.
 *   **UUIDv7 Routing:** In KungFu, a file is not a string (e.g., src/main.go). It is a 128-bit time-sortable UUIDv7. The path is merely mutable metadata. 
 *   **Conflict-Free Restructuring:** Because the VFS routes edits to UUIDs, an agent can rename /internal to /pkg while three other agents are performing character-level splices inside those files. The math routes the edits to the correct UUID regardless of the path change. 
-*   **The Execution Scratchpad (Zero-Friction Isolation):** To solve the "Context Paradox"—where agents need to run physical compilers (e.g., `go build`) on code that currently only exists as math in the CRDT—KungFu utilizes a Physical Mirror. When an agent begins a mutation, KungFu provisions a hidden directory (`.kungfu/workspaces/<agent-id>/`). The agent runs standard compilers inside this directory, ensuring 100% compatibility with every linter, LSP, and build tool on earth, while perfectly shielding the human's IDE from the agent's broken intermediate states.
+*   **The Execution Scratchpad:** Agents require physical files to run legacy compilers (`go build`, `npm test`). KungFu solves this "Context Paradox" via a Physical Mirror. It continuously projects the agent's CRDT state into a hidden directory (`.kungfu/workspaces/<agent-id>/`). This ensures 100% compatibility with existing build tools while shielding the human's primary IDE from unstable, intermediate agent states.
 *   **The Verb (kf transcribe) & I/O Optimization:** To prevent SSD burnout from projecting high-frequency agent splices into the Scratchpad, `transcribe` utilizes **Incremental Memory-Mapping (mmap)**. It does not rewrite whole files. It calculates the exact byte-delta between the physical disk and the Loro `MovableTree`, flushing only the changed bytes to the hardware. Furthermore, it is **strictly state-aware**: if an agent deletes a node in the CRDT, `transcribe` aggressively tombstones and removes the physical file, ensuring the disk is always a mathematically perfect reflection of the DNA.
 
 ### The Agent Gateway (MCP)
@@ -43,13 +43,13 @@ A heavier Gemma model sits atop the **Apache Iceberg Ledger**, which archives th
         *   "Show me the three most complex refactors this month that required more than 5 human interventions."
         *   "Replay the evolution of the 'PaymentGateway' from its initial stub to its current state, highlighting only the security-related splices."
         *   "Find all instances where an agent ignored a coding standard, and summarize the pattern of failure."
-*   **Industrial-Scale Engineering Intelligence:** The Iceberg backbone provides high-fidelity, live statistics that are physically impossible to extract from Git's static snapshots:
-    *   **Cognitive Collision Rate:** Measure how often different actors (AI or human) attempt to edit the same semantic block, identifying architectural "hotspots" that need decoupling.
-    *   **Mutation Survival Rate:** Track what percentage of agent-generated code survives "Natural Selection" (CI) on the first attempt, providing a direct metric for model/prompt efficiency.
-    *   **Surgical Velocity:** Instead of "Lines of Code," measure the frequency and precision of "Splices." Identify which parts of the codebase are "Fluid" (evolving fast) vs. "Brittle" (requiring constant rework).
-    *   **True Cost of Intent:** Link every sub-second operation back to its semantic Intent, allowing for precise financial attribution of agent spend to specific product features.
+*   **Industrial-Scale Intelligence:** The Iceberg backbone provides high-fidelity statistics impossible to extract from Git's static snapshots:
+    *   **Cognitive Collision Rate:** Measure how often different actors edit the same semantic block, identifying architectural "hotspots."
+    *   **Mutation Survival Rate:** Track the percentage of agent-generated code that passes CI on the first attempt—a direct metric for prompt efficiency.
+    *   **Surgical Velocity:** Measure the frequency and precision of "Splices" rather than "Lines of Code" to identify fluid vs. brittle modules.
+    *   **True Cost of Intent:** Link every sub-second operation to its semantic Intent for precise financial attribution of agent spend.
 
-This turns the VCS into an **Engineering Operating System**, where management is driven by data, not intuition.
+KungFu elevates the VCS into an **Engineering Operating System**, driving management via telemetry rather than intuition.
 
 ---
 
