@@ -15,7 +15,7 @@ KungFu abandons the 140+ administrative commands of Git. It replaces them with a
 The VFS is the "Brain" of the local client. It decouples **File Identity** from **Filesystem Pathing**.
 *   **UUIDv7 Routing:** In KungFu, a file is not a string (e.g., src/main.go). It is a 128-bit time-sortable UUIDv7. The path is merely mutable metadata. 
 *   **Conflict-Free Restructuring:** Because the VFS routes edits to UUIDs, an agent can rename /internal to /pkg while three other agents are performing character-level splices inside those files. The math routes the edits to the correct UUID regardless of the path change. 
-*   **The Verb (kf transcribe):** This tool materializes the mathematical state into physical files. It is **state-aware**, meaning it doesn't just write; it cleans. If an agent removes a file from the CRDT, transcribe aggressively "tombstones" and deletes the physical file from the disk, ensuring the developer's environment never drifts from the DNA.
+*   **The Verb (kf transcribe):** To allow agents to run legacy compilers (`go build`, `npm test`) without breaking the human's main IDE, KungFu projects the CRDT state to a hidden physical "Execution Scratchpad." To prevent SSD burnout from high-frequency agent splices, `transcribe` utilizes **Incremental Memory-Mapping (mmap)**. It does not rewrite whole files; it flushes only the exact byte-deltas to the physical disk. Furthermore, it is **state-aware**, aggressively tombstoning physical ghost-files if an agent deletes a node in the CRDT.
 
 ### The Agent Gateway (MCP)
 KungFu provides a native **Model Context Protocol (MCP)** server. This is the bridge that allows Claude, Gemini, and local models to "live" inside the VCS. 
@@ -28,7 +28,7 @@ KungFu is the first VCS that is semantically aware of the data it stores. We ach
 
 ### Local Tier: The Proactive Peer (Edge Intelligence)
 Sitting on the developer's machine, a lightweight Gemma model monitors the live CRDT stream.
-*   **The Immune System:** Gemma performs an AST (Abstract Syntax Tree) validation on every execution. It ensures that while the CRDT math is consistent, the resulting code is syntactically valid. If a rename caused a break, Gemma synthesizes the fix before the human is notified.
+*   **The Immune System (Human-Gated):** Gemma performs an AST validation on every merge/expose execution. While CRDTs guarantee mathematical convergence, they do not guarantee logical correctness. If a concurrent rename breaks the AST, Gemma acts as the immune system by synthesizing a patch. **Crucially, this patch is never applied silently.** It is quarantined as a "Proposed Mutation" requiring explicit human approval, ensuring the AI never quietly weaves logical bugs into the DNA.
 *   **Asynchronous Vigilance:** Gemma proactively looks for items humans and agents miss: **security vulnerabilities, hardcoded secrets, and violations of coding standards.** 
 *   **The Not Annoying Promise:** Gemma does not block the terminal or throw pop-ups. It uses the **Loro Cursor** system to drop silent, spatial markers in the code. A developer sees a glowing indicator on a line; clicking it reveals Gemma's reasoning (e.g., Warning: This string looks like a production API key).
 
