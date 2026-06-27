@@ -2,3 +2,11 @@
 output_chaos/
 output_final/
 output_test_2/
+
+# secrets / local node identity (never commit)
+.kungfu/
+*.key
+service_account.json
+*-sa.json
+*.tfstate
+.env
