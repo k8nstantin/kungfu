@@ -679,15 +679,23 @@ confidentiality and will not be described as such.
 
 ## Status
 
-The concept and architecture are documented here. The code in this repository is an **early
-prototype that predates this design** — roughly 1,200 lines of Rust implementing a working
-convergence-backed edit engine with an agent gateway. It does not yet reflect the model above.
+**Clean slate, by design.** The concept and architecture are documented here; the implementation
+starts from nothing.
 
-**The next step is the measurement that de-risks everything else:** replay five to ten years of a
-real repository's history into per-file documents and measure size, memory, load time and merge
-cost, including machine-generated edit patterns. Two weeks of work. It either validates the
-foundation or kills the idea before a product is built on top of it — and the code written for it
-becomes the migration add-on.
+An earlier prototype existed — roughly 1,200 lines of Rust with a working convergence-backed edit
+engine and an agent gateway — but it predated this design and did not reflect it. Rather than
+carry code shaped by a different model, it has been archived and removed. It remains fully
+recoverable for reference:
+
+```
+git checkout archive/prototype-v0
+```
+
+**The first piece of work is the measurement that de-risks everything else:** replay five to ten
+years of a real repository's history into per-file documents and measure size, memory, load time
+and merge cost, including machine-generated edit patterns. Roughly two weeks. It either validates
+the foundation or kills the idea before a product is built on top of it — and the code written for
+it becomes the migration add-on.
 
 ---
 

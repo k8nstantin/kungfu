@@ -17,3 +17,6 @@ token.json
 # python virtualenv
 venv/
 __pycache__/
+
+# macOS
+.DS_Store
