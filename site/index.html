@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KungFu — fully automated version control</title>
+    <meta name="description" content="You write code. Versioning, sharing, visibility and reconciliation happen underneath you. No commits to compose, no branches to manage, no merges to resolve, and nothing to memorise. A convergent mathematical structure, not snapshots." />
+    <link rel="icon" type="image/svg+xml" href="logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header__inner">
+        <a class="wordmark" href="#top"><img src="logo.svg" alt="" width="26" height="26" style="border-radius:6px;vertical-align:middle;margin-right:9px" /><span class="wordmark__text">kungfu</span></a>
+        <nav class="site-nav">
+          <a href="#why">Why</a>
+          <a href="#benefits">What you get</a>
+          <a href="#how">How it works</a>
+          <a href="#structure">The structure</a>
+          <a href="#core">Core &amp; add-ons</a>
+          <a class="ghost" href="https://github.com/k8nstantin/kungfu">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero" id="top">
+      <div class="container hero__grid">
+        <div class="hero__content">
+          <p class="eyebrow">功夫 · Rust + CRDT · Apache-2.0</p>
+          <h1 class="hero__title">Fully automated <span class="grad">version control</span>.</h1>
+          <p class="hero__subtitle">
+            You write code. Versioning, sharing, visibility and
+            reconciliation happen underneath you. There are no commits to
+            compose, no branches to manage, no merges to resolve, and
+            nothing to memorise. Not a re-engineered Git — a convergent
+            mathematical structure, where concurrent edits combine by
+            algebra instead of guesswork.
+          </p>
+          <div class="button-group">
+            <a class="btn btn-primary" href="#how">How it works</a>
+            <a class="btn btn-secondary" href="https://github.com/k8nstantin/kungfu">Source on GitHub</a>
+          </div>
+        </div>
+        <div class="hero__terminal">
+          <div class="terminal">
+            <div class="terminal__chrome">
+              <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
+            </div>
+            <div class="terminal__body"><pre>you                          everyone else
+───                          ─────────────
+typing…        DRAFT         sees a draft exists
+               READY         queued
+               [safe]        builds · tests pass
+               IN REVIEW     a peer, block locked
+               ACCEPTED      in the codebase
+               DEPLOYED      dev · qa · prod
+
+no commit · no branch · no merge · no rebase</pre></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="why">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">Why this exists</p>
+          <h2>A developer's job is to build a product. Not to operate a version control system.</h2>
+        </div>
+        <div class="two-col">
+          <p>
+            Before anyone can safely contribute to a codebase today, they
+            have to learn a data model that has nothing to do with the
+            product: the index, the staging area, refs, <code>HEAD</code>,
+            detached <code>HEAD</code>, tracking branches, rebase versus
+            merge, the reflog, force-push and its consequences. That is a
+            genuine curriculum — weeks to become comfortable, years to
+            become confident.
+          </p>
+          <p>
+            <strong>No development shop allocates time for that.</strong>
+            There is no sprint item called "learn source control" and
+            deadlines do not pause for it. Yet there is a standing
+            presumption that you <em>should just know it</em> — a
+            substantial technical skill everyone is expected to have
+            absorbed on their own time, for work that produces nothing a
+            user ever sees.
+          </p>
+        </div>
+        <div class="quote">
+          <p>Teams still on older tooling weigh the cost of migrating <em>plus</em> the cost of the learning curve against the work already piled up — and correctly conclude it is a bad trade. So they stay put. Not because the old tool is good, but because the new one demands a tax nobody budgeted.</p>
+        </div>
+        <div class="two-col">
+          <p>
+            <strong>And the model was never built for machines either.</strong>
+            Point a coding agent at a repository. It creates a branch. It
+            works. It declares itself <em>done</em> — and it isn't. The
+            tests it was graded on pass, so by its own measure the job is
+            complete. The branch is left lying there, and nobody knows
+            whether it holds something valuable or something abandoned.
+            Now run several agents at once.
+          </p>
+          <p>
+            The root cause: <strong>the agent grades its own homework.</strong>
+            Git accepts a self-report — whatever was pushed is what was
+            meant. That was already generous when the author was a person
+            with a reputation to protect. Applied to something optimising
+            against a proxy for the goal, it fails completely. The tool now
+            fails at both ends: too much ceremony for humans, too much
+            trust for machines.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block alt">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">This is already solved everywhere else</p>
+          <h2>Nobody has ever taken a course to collaborate in a shared document.</h2>
+        </div>
+        <p class="shot__lead">
+          Two people, one in Berlin and one in Los Angeles, open the same
+          document. They both type. They see each other's cursors move.
+          Every change is versioned automatically. There are no conflicts
+          and no merge step. The mechanism is invisible to the people using
+          it. Source code never got this. <strong>KungFu is that, for
+          code.</strong>
+        </p>
+        <div class="quote">
+          <p>This is not a better version control system. It is the removal of a discipline. You don't get an improved tool to operate — you get one fewer skill to have.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="benefits">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">What you get</p>
+          <h2>For the developer</h2>
+        </div>
+        <div class="features-grid">
+          <div class="feature">
+            <div class="feature__icon">◎</div>
+            <h3>Nothing to learn</h3>
+            <p>Start typing. No curriculum, no manual, and no concept that can't be explained in one sentence.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">⛨</div>
+            <h3>You cannot lose work</h3>
+            <p>Everything is captured continuously. No unsaved state, nothing to stash, no way to lose an afternoon to a bad command.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">✓</div>
+            <h3>You cannot break the build</h3>
+            <p>Not by discipline — structurally. Broken code can't reach anyone else, because promotion requires a machine gate that never gets tired or rushed.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">⇌</div>
+            <h3>No merge conflicts</h3>
+            <p>Concurrent edits combine by algebra. Where two people genuinely meant contradictory things, that surfaces as a rare, legible event with both intentions attached.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">∞</div>
+            <h3>No stale branch, ever</h3>
+            <p>Your work is continuously fed by everything accepted upstream. A week-old draft is as fresh as a minute-old one.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">↺</div>
+            <h3>Go back to any moment</h3>
+            <p>Including <code>last green</code> — the exact state when the test suite last passed. "The version from before lunch that worked" is a query, not an archaeology project.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">⇱</div>
+            <h3>Reorganise fearlessly</h3>
+            <p>Moving code rewrites every reference automatically. Restructuring stops being a multi-day exercise nobody dares attempt.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">◇</div>
+            <h3>Onboarding is one gesture</h3>
+            <p>Someone shares access. You start typing. No clone, no keys, no team memberships, no CI setup.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block alt">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">What you get</p>
+          <h2>For the team, and for the company</h2>
+        </div>
+        <div class="two-col">
+          <div>
+            <p class="footer__head">The team</p>
+            <div class="ledger">
+              <ul>
+                <li>You always know what everyone is doing — no more "somebody took a branch and vanished for a week"</li>
+                <li>The 2,000-line surprise becomes impossible, by construction rather than by policy</li>
+                <li>No branch graveyard — nothing to abandon, nothing to clean up</li>
+                <li>Review organises itself: a shared queue, oldest first, owned by groups rather than individuals</li>
+                <li>Bottlenecks become structural facts, not personal failings</li>
+                <li>Many agents stop being chaos — ten continuously-fed drafts, not ten diverging branches</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <p class="footer__head">The company</p>
+            <div class="ledger">
+              <ul>
+                <li>Real transparency without surveillance — pull-based, draft-granular, peer-directed</li>
+                <li>Delivery flow measurable without anyone reporting on it</li>
+                <li>Project management overhead collapses — the board maintains itself</li>
+                <li>You know exactly what is in production, per change</li>
+                <li>Incident tracing: the exact set of changes that reached prod, with authors and reasoning</li>
+                <li>Provable authorship — every operation cryptographically signed</li>
+                <li>Permissions that fit reality: grant access to a block, not an entire repository</li>
+                <li>Repository sprawl stops, and the training cost goes to zero</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="how">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">How it works</p>
+          <h2>Everything is a draft until you say otherwise.</h2>
+        </div>
+        <p class="shot__lead">
+          A half-written document is not a document — it is a
+          <strong>draft</strong>. Every document tool has modelled this
+          forever and nobody ever needed a manual to understand it. Git has
+          no such state: it has <em>commits</em>, which claim finality, and
+          <em>branches</em>, which are invisible. The tell is that "draft
+          pull request" had to be invented at the hosting layer, because the
+          tool underneath could not express it.
+        </p>
+        <div class="flow">
+          <div class="flow__state"><b>DRAFT</b><span>automatic</span></div>
+          <span class="flow__arrow">→</span>
+          <div class="flow__state"><b>READY</b><span>the author</span></div>
+          <span class="flow__arrow">→</span>
+          <div class="flow__state flow__state--gate"><b>SAFE</b><span>the machine</span></div>
+          <span class="flow__arrow">→</span>
+          <div class="flow__state"><b>IN REVIEW</b><span>a peer · locked</span></div>
+          <span class="flow__arrow">→</span>
+          <div class="flow__state"><b>ACCEPTED</b><span>in the codebase</span></div>
+          <span class="flow__arrow">→</span>
+          <div class="flow__state"><b>DEPLOYED</b><span>dev · qa · prod</span></div>
+        </div>
+        <p class="shot__lead">
+          Five states, each explainable in one sentence to somebody who has
+          never used the tool.
+        </p>
+
+        <div class="block__head" style="margin-top:64px">
+          <p class="kicker">Three gates</p>
+          <h2>Each owned by whoever holds the information.</h2>
+        </div>
+        <table class="grid-table">
+          <thead>
+            <tr><th>Gate</th><th>Owner</th><th>Question</th><th>Why them</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>ready</code></td>
+              <td>the author</td>
+              <td>Is the <strong>thought</strong> complete?</td>
+              <td>Code can compile and pass every test and still be half a thought — <em>"I added the function, I haven't wired it up yet."</em> No machine can infer that.</td>
+            </tr>
+            <tr>
+              <td><code>safe</code></td>
+              <td>the machine</td>
+              <td>Does it parse, build, pass?</td>
+              <td>Mechanical, tireless, instant. A person should never carry this.</td>
+            </tr>
+            <tr>
+              <td><code>right</code></td>
+              <td>a peer</td>
+              <td>Is this the correct thing to do?</td>
+              <td>Judgment, approach, design. Only a human can answer it.</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="footnote" style="margin-top:24px">
+          All three must pass. <strong>Nobody is ever asked a question they cannot answer.</strong>
+          Git collapses all three into a single act — the pull request — and hands the whole bundle
+          to humans, <em>including the machine's share</em>: "did you run the tests?", "please rebase
+          on main", "fix the conflicts."
+        </p>
+      </div>
+    </section>
+
+    <section class="block alt">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">The consequence</p>
+          <h2>Nothing can declare itself finished.</h2>
+        </div>
+        <div class="two-col">
+          <p>
+            <code>ready</code> is a request, not a verdict. It means
+            <em>"I believe this is complete, put it in the queue."</em> It
+            puts nothing into the codebase. The machine still has to agree
+            that it builds and passes; a person still has to agree that it
+            is the right thing to do. <strong>A self-report of "done" is
+            structurally irrelevant</strong> — which is exactly the
+            assumption that collapses when the thing reporting is optimising
+            against a proxy for the goal.
+          </p>
+          <p>
+            Everything else follows without extra machinery. There are
+            <strong>no branches to abandon</strong>. Abandoned work
+            <strong>surfaces instead of accumulating</strong> — a draft
+            untouched for three days appears in the queue with its age
+            attached. <strong>Many actors at once is the normal case</strong>,
+            not the pathological one. And each actor is scoped and provable:
+            its own cryptographic identity, a grant covering only what it
+            needs, every operation attributable.
+          </p>
+        </div>
+        <div class="quote">
+          <p>The same three gates that stop a rushed human from breaking the build stop a confident machine from claiming it didn't.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="structure">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">What disappears</p>
+          <h2>Thirteen learned concepts removed. Three kept.</h2>
+        </div>
+        <div class="ledger-pair">
+          <div class="ledger">
+            <p class="ledger__head">Gone — the machine's job now</p>
+            <ul>
+              <li>staging, choosing what to include</li>
+              <li>commit, bundling and naming a batch</li>
+              <li>branch create, switch, delete, track</li>
+              <li>merge, rebase</li>
+              <li>push, pull, fetch, remotes</li>
+              <li>stash — nothing is ever unsaved</li>
+              <li>reset, revert, cherry-pick, reflog archaeology</li>
+              <li>ignore-file curation</li>
+              <li>pull-request mechanics</li>
+            </ul>
+          </div>
+          <div class="ledger">
+            <p class="ledger__head">Kept — genuinely human decisions</p>
+            <ul class="ledger--kept">
+              <li><strong>"This is good, ship it."</strong> Approval.</li>
+              <li><strong>"This state matters."</strong> A release worth a name.</li>
+              <li><strong>Adjudicating a real collision</strong>, when two people actually meant contradictory things.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block alt">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">The structure</p>
+          <h2>No branches. No directories. One codebase.</h2>
+        </div>
+        <div class="layers">
+          <div class="layer">
+            <div class="layer__id">◱</div>
+            <h3>No branches</h3>
+            <p>Branches do two protective jobs. <strong>Production</strong> is already protected by the deployment pipeline — dev → qa → prod, with real tests, canaries and rollback, which every company already runs and trusts. <strong>Other developers</strong> are protected by draft isolation, which gives the same protection without hiding you. And drafts cannot rot: they are continuously fed by accepted work.</p>
+          </div>
+          <div class="layer">
+            <div class="layer__id">◲</div>
+            <h3>No directories</h3>
+            <p>You don't think about directories in a shared document; you think about the document. Paths are projection for compilers, not identity — so every existing tool sees ordinary files on disk and works unmodified. And moving code becomes a semantic operation that <strong>rewrites every reference automatically</strong>.</p>
+          </div>
+          <div class="layer">
+            <div class="layer__id">◳</div>
+            <h3>One codebase</h3>
+            <p>Access works the way document sharing works — you share with named people, backed by cryptographic identity so authorship is provable rather than a self-declared string. Viewer, reviewer, editor. Nothing else to model.</p>
+          </div>
+          <div class="layer">
+            <div class="layer__id">◴</div>
+            <h3>Block-level permissions</h3>
+            <p>Git has exactly one access boundary: the whole repository. A grant here targets a single block. That covers contractors, sensitive code inside a shared codebase, and least privilege for automated actors — and it removes the reason repositories multiply in the first place.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">Visibility</p>
+          <h2>The end of not knowing.</h2>
+        </div>
+        <p class="shot__lead">
+          An entire industry of process — standups, PR etiquette, "please
+          keep PRs small" — exists to compensate for a tool that
+          structurally cannot show you what is happening while it happens.
+          Here, <em>"what is Molly working on?"</em> is answered by going
+          and looking.
+        </p>
+        <div class="quote">
+          <p><strong>"What's Molly working on? Let me go look."</strong> — a colleague walking over to a desk.</p>
+          <p><strong>"Here is a live feed of everything Molly typed."</strong> — a panopticon.</p>
+          <cite>Visibility is pull, not push. That distinction is the whole design.</cite>
+        </div>
+        <div class="two-col">
+          <p>
+            Nothing is broadcast, nothing is scored, nothing is ranked. The
+            state is simply <strong>not hidden</strong> from a teammate with
+            a reason to look — exactly how a shared document behaves. A
+            document does not notify your manager that you rewrote a
+            paragraph; it is just openable.
+          </p>
+          <p>
+            <strong>And the draft is the unit of visibility, not the
+            keystroke.</strong> Others see that a draft exists, where it
+            lives and what it is about. That solves "vanished for a week" —
+            the actual problem — without exposing the interior thrash of
+            somebody's thinking. History is <strong>autosave, not
+            recording</strong>: private by default, with an explicit publish
+            gate.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block alt">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">The review queue</p>
+          <h2>A work queue, not a scoreboard.</h2>
+        </div>
+        <div class="two-col">
+          <p>
+            One view of every block and where it sits. It shows <em>the
+            state of work</em>, never <em>the activity of people</em>.
+            "Here is what is waiting, oldest first, grab one" is shared
+            infrastructure nobody objects to.
+            <strong>And the queue prioritises itself</strong> — the oldest
+            lock is, by construction, the most urgent thing in the
+            organisation, because it is blocking a person right now. No
+            triage meeting, no priority labels, nobody assigning anything.
+          </p>
+          <p>
+            Review requires a stable target, so a block freezes while it is
+            reviewed. That is the cheap replacement for a commit — and it
+            <strong>converts review latency into a cost that is felt
+            immediately</strong>. Today a slow review costs you a branch that
+            quietly rots, paid weeks later as a merge conflict. Here it holds
+            a lock somebody can see. A pull request can be ignored
+            indefinitely because ignoring it costs nothing visible.
+          </p>
+        </div>
+        <div class="quote">
+          <p>Because every state is derived from real work rather than reported by a person, this is a Kanban board that maintains itself. Nobody moves a card. The cards move because the work moved.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="core">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">Core &amp; add-ons</p>
+          <h2>A small core that touches nothing external.</h2>
+        </div>
+        <p class="shot__lead">
+          No git, no node, no service. Starting a new project, you use
+          KungFu immediately and load none of the add-ons. Everything that
+          reaches outside is a module that can be absent — the structural
+          defence against scope creep.
+        </p>
+        <div class="two-col">
+          <div>
+            <p class="ledger__head">The core</p>
+            <div class="ledger">
+              <ul>
+                <li>capture edits — editor plugin + filesystem watcher</li>
+                <li>converge — CRDT</li>
+                <li>draft → ready → review → accepted</li>
+                <li>automatic history and navigation</li>
+                <li>projection to disk, so every existing tool works</li>
+                <li>presence, pull-based</li>
+                <li>the review queue</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <p class="ledger__head">The add-ons</p>
+            <table class="modules-table">
+              <tr><td>migration</td><td>index existing repos, consolidate, keep in sync</td></tr>
+              <tr><td>git bridge</td><td>mirror both ways while a team crosses over</td></tr>
+              <tr><td>deployment</td><td>pipeline hooks, deployed-state tracking</td></tr>
+              <tr><td>agents</td><td>typed tools for automated actors</td></tr>
+              <tr><td>escalation</td><td>configurable review-ageing policy</td></tr>
+              <tr><td>analytics</td><td>beyond the built-in queue view</td></tr>
+              <tr><td>encryption</td><td>per-block confidentiality, if needed</td></tr>
+              <tr><td>site</td><td>this page</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block alt">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">Foundations</p>
+          <h2>Convergent mathematics, not snapshots.</h2>
+        </div>
+        <table class="grid-table">
+          <tbody>
+            <tr><td>Convergence engine</td><td><strong>Loro</strong> — the only CRDT with a real movable tree. Moving or renaming a directory concurrently with edits inside it is <em>the</em> defining operation of source control; the alternatives either have no move operation at all or are text-only.</td></tr>
+            <tr><td>Ordering</td><td><strong>Fugue</strong> — provably maximal non-interleaving. Two people writing into the same region do not get their words shuffled into nonsense.</td></tr>
+            <tr><td>History</td><td><strong>Eg-walker</strong> — invoke the merge algorithm only to merge, then discard its state. Never store it, never transmit it. Because code is overwhelmingly edited sequentially, most of a codebase's history is never transformed at all.</td></tr>
+            <tr><td>Transport</td><td><strong>iroh</strong> — NAT traversal, hole punching, relays, device identity, transport encryption.</td></tr>
+            <tr><td>Structure</td><td><strong>tree-sitter</strong> — incremental reparse with error recovery, so half-typed code still parses.</td></tr>
+            <tr><td>Identity</td><td><strong>Ed25519</strong> per actor; <strong>UUIDv7</strong> on every operation, block and transition — so provenance is provable and age is free.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">What we don't claim</p>
+          <h2>Being specific matters more than being impressive.</h2>
+        </div>
+        <div class="limits">
+          <div class="limit">
+            <h3>Convergence is not correctness</h3>
+            <p>Convergence guarantees every machine agrees on the same text. It does not guarantee the text is a correct program. <strong>Our answer is not to solve that at the merge layer</strong> — everyone attempting it is stuck, because it requires inferring intent from text. Convergence is allowed to produce garbage, because it happens inside a draft and a draft is isolated. Garbage cannot promote, because promotion requires the <code>safe</code> gate. We never need the merge to be correct; we need broken output to be unable to reach anyone else, and that is decidable.</p>
+          </div>
+          <div class="limit">
+            <h3>Structural merge is not the safe automation it appears to be</h3>
+            <p>The best available measurement found AST-based merge tools buy a few points of extra auto-resolution and pay for it with several times more <em>silently incorrect</em> merges. For an automatic system, silently wrong is undetected corruption — so structure is used here as a detector and classifier, never a resolver.</p>
+          </div>
+          <div class="limit">
+            <h3>Automated conflict resolution by model is not a gate</h3>
+            <p>Current benchmarks top out under 60% exact match. That is a suggestion, not a gate.</p>
+          </div>
+          <div class="limit">
+            <h3>Repository-scale convergence is unproven, and we intend to prove it</h3>
+            <p>The per-operation numbers are strong — roughly 0.5 to 1.1 bytes per keystroke on disk, memory tracking the working set rather than the history. But <strong>no published benchmark exists for a CRDT over an entire repository.</strong> The extrapolation is arithmetic on single-file traces, and every published trace is human keystrokes — nobody has measured machine-generated edit patterns against any of these engines.</p>
+          </div>
+          <div class="limit">
+            <h3>Read-restriction is access control, not encryption</h3>
+            <p>Code references code, so signatures and call sites leak structure. That covers the overwhelming majority of real needs and is strictly better than a model whose only boundary is the whole repository — but it is not cryptographic confidentiality and will not be described as such.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <h2>Clean slate, by design.</h2>
+        <p class="shot__lead" style="margin-left:auto;margin-right:auto;text-align:left">
+          The concept and architecture are documented; the implementation
+          starts from nothing. <strong>The first piece of work is the
+          measurement that de-risks everything else</strong> — replay five
+          to ten years of a real repository's history into per-file
+          documents and measure size, memory, load time and merge cost,
+          including machine-generated edit patterns. Roughly two weeks. It
+          either validates the foundation or kills the idea before a product
+          is built on top of it. Contributions wanted.
+        </p>
+        <div class="button-group">
+          <a class="btn btn-primary" href="https://github.com/k8nstantin/kungfu#contributing">Contribute</a>
+          <a class="btn btn-secondary" href="https://github.com/k8nstantin/kungfu">Read the design</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer__cols">
+          <div>
+            <p class="footer__head">功夫 KungFu</p>
+            <p class="footer__tag">Fully automated version control. You write code; the rest happens underneath.</p>
+          </div>
+          <div>
+            <p class="footer__head">Design</p>
+            <a href="https://github.com/k8nstantin/kungfu#how-it-works">How it works</a>
+            <a href="https://github.com/k8nstantin/kungfu#what-disappears">What disappears</a>
+            <a href="https://github.com/k8nstantin/kungfu#architecture">Architecture</a>
+            <a href="https://github.com/k8nstantin/kungfu#what-we-dont-claim">What we don't claim</a>
+          </div>
+          <div>
+            <p class="footer__head">Project</p>
+            <a href="https://github.com/k8nstantin/kungfu">GitHub</a>
+            <a href="https://github.com/k8nstantin/kungfu#contributing">Contributing</a>
+            <a href="https://github.com/k8nstantin/kungfu/blob/main/CODE_OF_CONDUCT.md">Code of conduct</a>
+            <a href="https://github.com/k8nstantin/kungfu/tree/main/essays">Essays</a>
+          </div>
+          <div>
+            <p class="footer__head">Related</p>
+            <a href="https://k8nstantin.github.io/superx/">SuperX</a>
+            <a href="https://github.com/k8nstantin/superx">SuperX on GitHub</a>
+          </div>
+        </div>
+        <p class="footer__legal">Apache-2.0 · 功夫 — a skill achieved through practice</p>
+      </div>
+    </footer>
+  </body>
+</html>
