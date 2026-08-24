@@ -2,3 +2,14 @@
 output_chaos/
 output_final/
 output_test_2/
+
+# Credentials — never commit
+service_account.json
+credentials.json
+token.json
+*.pem
+.env
+
+# Python virtualenv
+venv/
+__pycache__/
