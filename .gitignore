@@ -6,7 +6,14 @@ output_test_2/
 # secrets / local node identity (never commit)
 .kungfu/
 *.key
+*.pem
 service_account.json
 *-sa.json
+credentials.json
+token.json
 *.tfstate
 .env
+
+# python virtualenv
+venv/
+__pycache__/
