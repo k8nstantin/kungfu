@@ -14,3 +14,4 @@ in this folder governs it.
 | [ANL_THOUGHT_EXPERIMENT.md](./ANL_THOUGHT_EXPERIMENT.md) | A thought experiment about machine-native representations of logic. The genuinely useful part is the trust paradox — if an agent writes machine logic and a second model translates it back for a human to audit, you have a model auditing a model. That question is real and unsolved; the rest of the document is speculation. |
 | [THE_LAST_SEMICOLON.md](./THE_LAST_SEMICOLON.md) | Science fiction. |
 | [THE_EVOLUTION_PRESENTATION.md](./THE_EVOLUTION_PRESENTATION.md) | Slide outline for the above. |
+| [CONVERGENCE_WITH_SCION.md](./CONVERGENCE_WITH_SCION.md) | Not speculation — a dated record. Where KungFu and Anthropic's Scion (published 2026-10-13) reached the same conclusions, with server-timestamped evidence of when KungFu published them, and where they diverge. |
