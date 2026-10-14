@@ -4,7 +4,8 @@ The KungFu project page. Static HTML and CSS — no build step, no dependencies,
 
 ```
 site/
-  index.html    the page
+  index.html                    the project page
+  convergence-with-scion.html   dated record: KungFu and Anthropic's Scion
   style.css     design system
   logo.svg      mark — three streams converging into one
 ```
@@ -31,6 +32,9 @@ KungFu-specific components live in the `KungFu additions` block at the end of `s
 | `.ledger-pair` / `.ledger` | the gone/kept and team/company two-ups |
 | `.quote` | pull quotes |
 | `.limit` | the "what we don't claim" entries |
+| `.timeline` | the two-lane public-dates timeline on the convergence page |
+| `.kind` | which clock a timestamp comes from: `--server` (GitHub) or `--author` (git) |
+| `.implications` | the numbered "what it means" list |
 
 If the palette or a shared component changes upstream, copy it down rather than diverging.
 

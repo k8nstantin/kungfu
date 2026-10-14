@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KungFu — convergence with Scion</title>
+    <meta name="description" content="A dated record of where KungFu and Anthropic's Scion reached the same conclusions about source control, when each was first public, and where they diverge." />
+    <link rel="icon" type="image/svg+xml" href="logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header__inner">
+        <a class="wordmark" href="index.html"><img src="logo.svg" alt="" width="26" height="26" style="border-radius:6px;vertical-align:middle;margin-right:9px" /><span class="wordmark__text">kungfu</span></a>
+        <nav class="site-nav">
+          <a href="index.html">Overview</a>
+          <a href="#claim">The claim</a>
+          <a href="#evidence">Evidence</a>
+          <a href="#converged">Comparison</a>
+          <a class="ghost" href="https://github.com/k8nstantin/kungfu">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero hero--page" id="top">
+      <div class="container">
+        <p class="eyebrow">功夫 · Dated record · 2026-10-14</p>
+        <h1 class="hero__title">Convergence: KungFu and <span class="grad">Scion</span></h1>
+        <p class="hero__subtitle">
+          On 2026-10-13 Anthropic published
+          <a href="https://www.anthropic.com/engineering/redesigning-source-control">Redesigning source control at Anthropic</a>,
+          describing Scion, the system that replaced git for their monorepo.
+          Much of its diagnosis, and several of its design choices, match what
+          this project has said publicly since 2026-05-10. This page records
+          where the two converged, the evidence for when, and what is not
+          being claimed.
+        </p>
+      </div>
+    </section>
+
+    <section class="block" id="claim">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">The claim, stated precisely</p>
+          <h2>KungFu reached the same diagnosis independently and published it <span class="grad">five months earlier</span>.</h2>
+        </div>
+
+        <div class="timeline" role="img" aria-label="Timeline for 2026. KungFu public on GitHub from May 10. Scion's post published October 13. The earlier internal work Scion's post describes, back to January, is Anthropic's own account and cannot be checked from outside. 156 days between the two public dates.">
+          <div class="timeline__lanes">
+            <div class="timeline__lane">
+              <span class="timeline__name">KungFu</span>
+              <div class="timeline__track">
+                <div class="timeline__seg timeline__seg--public" style="left:42.6%;right:0"></div>
+                <div class="timeline__pin" style="left:42.6%"></div>
+                <span class="timeline__label" style="left:42.6%">May 10 · public</span>
+              </div>
+            </div>
+            <div class="timeline__lane">
+              <span class="timeline__name">Scion</span>
+              <div class="timeline__track">
+                <div class="timeline__seg timeline__seg--claimed" style="left:0;width:94.1%"></div>
+                <div class="timeline__pin" style="left:94.1%"></div>
+                <span class="timeline__label timeline__label--end" style="left:calc(94.1% + 7px)">Oct 13 · public</span>
+              </div>
+            </div>
+          </div>
+          <div class="timeline__gap-row" aria-hidden="true">
+            <div class="timeline__gap" style="left:42.6%;width:51.5%"></div>
+            <span class="timeline__gap-label" style="left:68.35%">156 days</span>
+          </div>
+          <div class="timeline__axis" aria-hidden="true">
+            <span style="left:0">Jan</span>
+            <span class="minor" style="left:10.2%">Feb</span>
+            <span style="left:19.5%">Mar</span>
+            <span class="minor" style="left:29.7%">Apr</span>
+            <span style="left:39.6%">May</span>
+            <span class="minor" style="left:49.8%">Jun</span>
+            <span style="left:59.7%">Jul</span>
+            <span class="minor" style="left:70%">Aug</span>
+            <span style="left:80.2%">Sep</span>
+            <span class="minor" style="left:90.1%">Oct</span>
+          </div>
+          <div class="timeline__legend">
+            <span><i class="timeline__swatch timeline__seg--public"></i>Public, with a date anyone can check</span>
+            <span><i class="timeline__swatch timeline__seg--claimed"></i>Internal work described in Scion's post; cannot be checked from outside</span>
+          </div>
+        </div>
+
+        <p class="shot__lead">The two dates are not the same kind of evidence.</p>
+        <div class="table-scroll">
+          <table class="grid-table grid-table--evidence">
+            <thead><tr><th></th><th>First public</th><th>Verifiable by</th></tr></thead>
+            <tbody>
+              <tr><td>KungFu</td><td class="mono">2026-05-10</td><td>GitHub's server timestamps, available to anyone</td></tr>
+              <tr><td>Scion</td><td class="mono">2026-10-13</td><td>The article's publication date</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="two-col" style="margin-top:var(--space-xl)">
+          <p>
+            Scion's article describes internal work before that: a chart
+            beginning in January 2026 and an ingestion prototype written
+            "earlier in the year." That is Anthropic's own account of private
+            work, and it cannot be checked from outside. <strong>This page
+            makes no claim about when Scion began internally.</strong>
+          </p>
+          <p>
+            It claims only what the public record shows: KungFu was public
+            first, by five months, and could not have drawn on Scion, which
+            was not public. That is the more useful fact anyway. A system
+            built and run at Anthropic's scale arriving at the same
+            conclusions is <strong>evidence the conclusions are right.</strong>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block alt" id="evidence">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">The evidence</p>
+          <h2>Every date links to the record it comes from.</h2>
+        </div>
+
+        <h3>Server-timestamped <span class="kind kind--server">set by GitHub</span></h3>
+        <p class="shot__lead">
+          These timestamps are set by GitHub, not by the author, and cannot be
+          backdated. GitHub records an edit timestamp on issue bodies; none of
+          these has ever been edited.
+        </p>
+        <div class="table-scroll">
+          <table class="grid-table grid-table--evidence grid-table--wide">
+            <thead><tr><th>What</th><th>When (UTC)</th><th>Relevance</th></tr></thead>
+            <tbody>
+              <tr><td><a href="https://github.com/k8nstantin/kungfu">Repository k8nstantin/kungfu</a> created, public</td><td class="mono">2026-05-10 17:39:15</td><td>The anchor</td></tr>
+              <tr><td><a href="https://github.com/k8nstantin/kungfu/issues?q=is%3Aissue+created%3A2026-05-10">Issues #1–#5</a></td><td class="mono">2026-05-10 20:54–20:55</td><td>Central sync server, binary files, intent dashboard</td></tr>
+              <tr><td><a href="https://github.com/k8nstantin/kungfu/pull/8">PR #8</a> opened and merged</td><td class="mono">2026-05-11 20:15 / 20:32</td><td>Agent coordination through the shared code</td></tr>
+              <tr><td><a href="https://github.com/k8nstantin/kungfu/issues/9">Issue #9</a></td><td class="mono">2026-05-12 12:31:47</td><td><code>kf ingest</code>: importing existing git projects</td></tr>
+              <tr><td><a href="https://github.com/k8nstantin/kungfu/issues/11">Issue #11</a></td><td class="mono">2026-05-12 16:28:41</td><td>Disposable server; cloud object storage as the source of truth</td></tr>
+              <tr><td><a href="https://github.com/k8nstantin/kungfu/issues/13">Issue #13</a></td><td class="mono">2026-05-17 11:31:26</td><td>Block-level convergence over parsed code</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin-top:var(--space-2xl)">Commit-dated <span class="kind kind--author">set by the author</span></h3>
+        <p class="shot__lead">
+          Commit dates are set by the author, and history was rewritten on
+          2026-06-26 (<a href="https://github.com/k8nstantin/kungfu/commit/eef8ae5"><code>eef8ae5</code></a>)
+          to purge a committed key, so the current hashes postdate that
+          rewrite. These are supporting evidence; the server timestamps above
+          are the anchor.
+        </p>
+        <div class="table-scroll">
+          <table class="grid-table grid-table--evidence grid-table--wide">
+            <thead><tr><th>Idea</th><th>First appears</th><th>Date</th></tr></thead>
+            <tbody>
+              <tr><td>Agent-first, operation-based, a write-ahead log instead of snapshots</td><td class="mono"><a href="https://github.com/k8nstantin/kungfu/commit/b3102e2">b3102e2</a></td><td class="mono">2026-05-10</td></tr>
+              <tr><td>Trunk-only, no branches</td><td class="mono"><a href="https://github.com/k8nstantin/kungfu/commit/6238e14">6238e14</a></td><td class="mono">2026-05-10</td></tr>
+              <tr><td>One monorepo; "agents do not clone"</td><td class="mono"><a href="https://github.com/k8nstantin/kungfu/commit/27d2482">27d2482</a></td><td class="mono">2026-05-10</td></tr>
+              <tr><td>Access control on logical boundaries inside the monorepo</td><td class="mono"><a href="https://github.com/k8nstantin/kungfu/commit/27d2482">27d2482</a></td><td class="mono">2026-05-10</td></tr>
+              <tr><td>A continuous verification gate replacing branch-based safety</td><td class="mono"><a href="https://github.com/k8nstantin/kungfu/commit/27d2482">27d2482</a></td><td class="mono">2026-05-10</td></tr>
+              <tr><td>"Agents write, humans review"</td><td class="mono"><a href="https://github.com/k8nstantin/kungfu/commit/829e664">829e664</a></td><td class="mono">2026-05-10</td></tr>
+              <tr><td>Hot buffer plus cloud object storage as the durable ledger</td><td class="mono"><a href="https://github.com/k8nstantin/kungfu/commit/004168a">004168a</a></td><td class="mono">2026-05-12</td></tr>
+              <tr><td>Lock contention on branch refs as the failure point</td><td class="mono"><a href="https://github.com/k8nstantin/kungfu/commit/f063969">f063969</a></td><td class="mono">2026-05-14</td></tr>
+              <tr><td>Tiered history: recent locally, deep history fetched centrally</td><td class="mono"><a href="https://github.com/k8nstantin/kungfu/commit/033fac9">033fac9</a></td><td class="mono">2026-05-14</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="converged">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">Where they converged</p>
+          <h2>The same diagnosis, and many of the same design choices.</h2>
+        </div>
+        <div class="table-scroll">
+          <table class="grid-table grid-table--compare">
+            <thead><tr><th></th><th>KungFu</th><th>Scion</th></tr></thead>
+            <tbody>
+              <tr><td>The diagnosis</td><td>Git was built for humans exchanging patches and offline trust; agents break its assumptions.</td><td>Git was built for distributed, offline clients; nearly all of theirs are always-online agents and jobs.</td></tr>
+              <tr><td>The bottleneck</td><td>Lock contention on branch refs, repository congestion.</td><td>No global merge lock; commits are lock-free; a ref update is a single compare-and-swap.</td></tr>
+              <tr><td>Trunk</td><td>Trunk-only. Named releases kept.</td><td>Refs discouraged except main and release branches.</td></tr>
+              <tr><td>One repository</td><td>Native monorepo; agents work without cloning.</td><td>One monorepo; source control exposed as an API so jobs need no local copy.</td></tr>
+              <tr><td>Changes, not snapshots</td><td>An attributed operation stream with a write-ahead log.</td><td>A changeset is a write-ahead-log entry holding changes relative to its parent, with no tree pointer.</td></tr>
+              <tr><td>Derived state</td><td>Blocks, paths, review state, deploy state and <code>last green</code> are derived, never declared.</td><td>Blame, path history and graph indices are derived data, invisible to clients.</td></tr>
+              <tr><td>Topology</td><td>Per-machine daemon, central hot path, cloud object storage underneath.</td><td>Per-node daemon, per-region cache, authoritative server on a database plus cloud storage.</td></tr>
+              <tr><td>Access inside one repo</td><td>Narrow grants for sensitive code instead of exiling it to a separate repository.</td><td>Per-directory access control to protect sensitive code within the monorepo.</td></tr>
+              <tr><td>Review</td><td>The reviewer judges whether the change is the right thing to do.</td><td>Review judges the intent of a change rather than every line.</td></tr>
+              <tr><td>Safety</td><td>Branches were never the safety mechanism; the pipeline is.</td><td>No global merge-queue lock; post-merge and pre-deploy automated testing.</td></tr>
+              <tr><td>Migration</td><td><code>kf ingest</code> (issue #9); replaying real history is the first piece of work.</td><td>A git-to-Scion ingestion pipeline.</td></tr>
+              <tr><td>Restraint</td><td>The clean cut (<a href="https://github.com/k8nstantin/kungfu/commit/db74a9c"><code>db74a9c</code></a>) and the third law: a feature that only makes sense in a story about the future of software is not core.</td><td>Much of the engineers' work was telling the model no when it over-engineered for hypothetical concerns.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="block alt" id="diverged">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">Where they did not</p>
+          <h2>These are as informative as the agreements.</h2>
+        </div>
+        <div class="limits">
+          <div class="limit">
+            <h3>Online versus local-first</h3>
+            <p>Scion assumes clients are always online: a thin client, a bounded cache, authority on the server. KungFu's local daemon owns the state and converges offline.</p>
+          </div>
+          <div class="limit">
+            <h3>The unit of change</h3>
+            <p>Scion keeps commits and merges, made cheap and moved server-side. KungFu removes them in favour of operations and derived blocks.</p>
+          </div>
+          <div class="limit">
+            <h3>Conflicts</h3>
+            <p>Scion lets the model repair them. KungFu proposed exactly that early on (<a href="https://github.com/k8nstantin/kungfu/commit/c349feb"><code>c349feb</code></a>, 2026-05-14) and then rejected it: model-based resolution is a suggestion, not a gate. Convergence may produce garbage inside a draft; garbage cannot promote.</p>
+          </div>
+          <div class="limit">
+            <h3>Virtual filesystems</h3>
+            <p>Scion materialises files on demand. KungFu rejected virtual filesystems (<a href="https://github.com/k8nstantin/kungfu/commit/3c271c4"><code>3c271c4</code></a>, 2026-05-14), on the grounds that the only one that works runs on a managed fleet, which is what Scion's clients, mostly CI and agent jobs, are.</p>
+          </div>
+          <div class="limit">
+            <h3>When the gate runs</h3>
+            <p>KungFu's machine gate runs before work is accepted. Scion's post says they could not make a global merge-queue lock work, and tests after the merge instead.</p>
+          </div>
+          <div class="limit">
+            <h3>When work becomes visible</h3>
+            <p>In Scion, from the moment of commit. In KungFu, from the first keystroke, as a draft.</p>
+          </div>
+          <div class="limit">
+            <h3>Scope</h3>
+            <p>Scion says plainly that it is not a general git replacement and hopes its ideas flow back into git. KungFu is meant for everyone, including teams still on SourceSafe.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="neither">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">What neither invented</p>
+          <h2>Most of the shared mechanisms predate both projects.</h2>
+        </div>
+        <div class="ledger-pair">
+          <div>
+            <p class="ledger__head">Google's Piper and CitC</p>
+            <div class="ledger">
+              <ul>
+                <li>One monorepo and trunk-based development</li>
+                <li>Per-directory permissions</li>
+                <li>Virtual working copies</li>
+                <li>Already cited in KungFu's README</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <p class="ledger__head">Meta's Mononoke and Sapling</p>
+            <div class="ledger">
+              <ul>
+                <li>Server-side changesets stored relative to their parents</li>
+                <li>Derived data such as blame, computed on the server</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="quote" style="margin-top:var(--space-xl)">
+          <p>What is newer is the reason: agents, not humans, are now the primary client of source control, and that changes which of git's assumptions still hold. That is the part both projects arrived at in 2026.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block alt" id="means">
+      <div class="container">
+        <div class="block__head">
+          <p class="kicker">What it means for KungFu</p>
+          <h2>Two claims corroborated, one challenged, one question still open.</h2>
+        </div>
+        <ol class="implications">
+          <li><strong>The diagnosis is corroborated.</strong> A team with Anthropic's resources and a ten-fold rise in merge volume reached the same conclusions about git, trunks and monorepos.</li>
+          <li><strong>"The pipeline is the real gate" is corroborated.</strong> They did not use a global merge-queue lock, and rely on post-merge and pre-deploy testing instead.</li>
+          <li><strong>"You cannot break the build" is challenged.</strong> Two drafts can each pass the machine gate against trunk and fail together. Re-validating every draft against a moving trunk is a merge queue, the thing Scion's post says they could not make work. The answer to dev, qa and prod on one trunk has to account for this.</li>
+          <li><strong>Release pointers survived.</strong> Even the most trunk-committed design kept release branches.</li>
+          <li><strong>The open question is still open.</strong> The post describes no CRDT, so it says nothing about convergence at repository scale. The replay measurement remains KungFu's to do.</li>
+        </ol>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer__cols">
+          <div>
+            <p class="footer__head">功夫 KungFu</p>
+            <p class="footer__tag">Fully automated version control. You write code; the rest happens underneath.</p>
+          </div>
+          <div>
+            <p class="footer__head">This page</p>
+            <a href="https://github.com/k8nstantin/kungfu/blob/main/essays/CONVERGENCE_WITH_SCION.md">Source note</a>
+            <a href="https://www.anthropic.com/engineering/redesigning-source-control">Anthropic's post</a>
+          </div>
+          <div>
+            <p class="footer__head">Project</p>
+            <a href="index.html">Overview</a>
+            <a href="https://github.com/k8nstantin/kungfu">GitHub</a>
+            <a href="https://github.com/k8nstantin/kungfu/tree/main/essays">Essays</a>
+          </div>
+          <div>
+            <p class="footer__head">Related</p>
+            <a href="https://k8nstantin.github.io/superx/">SuperX</a>
+            <a href="https://github.com/k8nstantin/superx">SuperX on GitHub</a>
+          </div>
+        </div>
+        <p class="footer__legal">Scion details are summarised from Anthropic's post of 2026-10-13 · Apache-2.0 · 功夫 — a skill achieved through practice</p>
+      </div>
+    </footer>
+  </body>
+</html>
